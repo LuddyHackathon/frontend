@@ -1,5 +1,6 @@
 import React from 'react';
-import { AppRegistry, Platform } from 'react-native';
+import { AppRegistry, Platform } from 'react-native'; import { NavigationContainer, Theme } from '@react-navigation/native';
+
 import { DarkTheme as NavigationDarkTheme, DefaultTheme as NavigationDefaultTheme } from '@react-navigation/native';
 import { MD3DarkTheme, MD3LightTheme, adaptNavigationTheme, PaperProvider } from 'react-native-paper';
 import merge from 'deepmerge';
@@ -14,7 +15,7 @@ if (module.hot) {
   module.hot.accept();
 }
 
-if (Platform.OS === 'web') {// Generate the required CSS
+if (Platform.OS === 'web') {// Generate CSS for icons
   const iconFontStyles = `@font-face {
     src: url(${iconFont});
     font-family: MaterialCommunityIcons;
@@ -62,7 +63,9 @@ function Main() {
   return (
     <PreferencesContext.Provider value={preferences}>
       <PaperProvider theme={theme}>
-        <App />
+        <NavigationContainer theme={theme}>
+          <App theme />
+        </NavigationContainer>
       </PaperProvider>
     </PreferencesContext.Provider>
   );

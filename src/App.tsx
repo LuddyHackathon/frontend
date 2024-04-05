@@ -22,7 +22,7 @@ export default function App() {
           header: (props) => {
             const options: NativeStackNavigationOptions = {};
             const { navigation, route } = props;
-            const back: string = route.name == 'Home' ? '': route.name;
+            const back: string = route.name === 'Home' ? '': route.name;
             const headerProps = { navigation, route, options, back };
             return <Header {...headerProps} />;
           }

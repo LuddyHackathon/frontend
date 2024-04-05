@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppRegistry, Platform } from 'react-native'; import { NavigationContainer, Theme } from '@react-navigation/native';
+import { AppRegistry, Platform } from 'react-native'; import { NavigationContainer } from '@react-navigation/native';
 
 import { DarkTheme as NavigationDarkTheme, DefaultTheme as NavigationDefaultTheme } from '@react-navigation/native';
 import { MD3DarkTheme, MD3LightTheme, adaptNavigationTheme, PaperProvider } from 'react-native-paper';

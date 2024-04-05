@@ -1,6 +1,6 @@
 import React from 'react';
 import { getHeaderTitle } from '@react-navigation/elements';
-import { Appbar, IconButton, useTheme } from 'react-native-paper';
+import { Appbar, IconButton } from 'react-native-paper';
 import { NativeStackNavigationOptions, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Route } from '@react-navigation/native';
 
@@ -21,17 +21,10 @@ type Props = {
 
 const Header = ({ navigation, route, options, back }: Props) => {
     const title = getHeaderTitle(options, route.name);
-    const theme = useTheme();
     const { toggleTheme, isThemeDark } = React.useContext(PreferencesContext);
 
     return (
-        <Appbar.Header
-            theme={{
-                colors: {
-                    primary: theme?.colors.surface,
-                },
-            }}
-        >
+        <Appbar.Header>
             {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
             <Appbar.Content title={title} />
             <IconButton

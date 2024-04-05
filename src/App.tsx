@@ -24,6 +24,7 @@ export default function App() {
           const { navigation, route } = props;
           const back: string = route.name === 'Home' ? '' : route.name;
           const headerProps = { navigation, route, options, back };
+          // @ts-expect-error: https://github.com/react-navigation/react-navigation/issues/10802
           return <Header {...headerProps} />;
         }
       }}>

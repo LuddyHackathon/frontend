@@ -1,6 +1,6 @@
 import React from 'react';
-import { AppRegistry, Platform } from 'react-native'; import { NavigationContainer } from '@react-navigation/native';
-
+import { AppRegistry, Platform, StatusBar } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import { DarkTheme as NavigationDarkTheme, DefaultTheme as NavigationDefaultTheme } from '@react-navigation/native';
 import { MD3DarkTheme, MD3LightTheme, adaptNavigationTheme, PaperProvider } from 'react-native-paper';
 import merge from 'deepmerge';
@@ -46,6 +46,7 @@ function Main() {
   const [isThemeDark, setIsThemeDark] = React.useState(false);
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
+  let statusBarStyle = isThemeDark ? 'light-content' : 'dark-content';
 
   const toggleTheme = React.useCallback(() => {
     return setIsThemeDark(!isThemeDark);
@@ -58,9 +59,15 @@ function Main() {
     }),
     [toggleTheme, isThemeDark]
   );
+
   return (
     <PreferencesContext.Provider value={preferences}>
       <PaperProvider theme={theme}>
+        <StatusBar
+          backgroundColor={theme.colors.background}
+          barStyle={statusBarStyle}
+          hidden={false}
+        />
         <NavigationContainer theme={theme}>
           <App theme />
         </NavigationContainer>

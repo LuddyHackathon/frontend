@@ -21,7 +21,6 @@ if (Platform.OS === 'web') {// Generate CSS for icons
     font-family: MaterialCommunityIcons;
   }`;
 
-  // Create a stylesheet
   const style = document.createElement('style');
   style.type = 'text/css';
 
@@ -32,7 +31,6 @@ if (Platform.OS === 'web') {// Generate CSS for icons
     style.appendChild(document.createTextNode(iconFontStyles));
   }
 
-  // Inject the stylesheet into the document head
   document.head.appendChild(style);
 }
 

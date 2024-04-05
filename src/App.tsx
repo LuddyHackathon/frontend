@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { NavigationContainer, Theme } from '@react-navigation/native';
 import { NativeStackNavigationOptions, createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Header from './screens/Header';

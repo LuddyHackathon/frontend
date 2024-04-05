@@ -43,7 +43,7 @@ const CombinedDefaultTheme = merge(MD3LightTheme, LightTheme);
 const CombinedDarkTheme = merge(MD3DarkTheme, DarkTheme);
 
 function Main() {
-  const [isThemeDark, setIsThemeDark] = React.useState(false);
+  const [isThemeDark, setIsThemeDark] = React.useState(true);
 
   let theme = isThemeDark ? CombinedDarkTheme : CombinedDefaultTheme;
   let statusBarStyle = isThemeDark ? 'light-content' : 'dark-content';

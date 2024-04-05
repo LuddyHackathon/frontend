@@ -4,7 +4,7 @@ import { Appbar, IconButton, useTheme } from 'react-native-paper';
 import { NativeStackNavigationOptions, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Route } from '@react-navigation/native';
 
-import {RootStackParamList} from '../App'
+import { RootStackParamList } from '../App'
 import { PreferencesContext } from '../PreferencesContext';
 
 type HeaderScreenNavigationProp = NativeStackNavigationProp<

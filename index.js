@@ -6,34 +6,34 @@ import merge from 'deepmerge';
 import { name as appName } from './app.json';
 import App from './src/App';
 
+import iconFont from 'react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf';
+
 import { PreferencesContext } from './src/PreferencesContext';
 
 if (module.hot) {
   module.hot.accept();
 }
 
-import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-
-// Generate the required CSS
-import iconFont from 'react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf';
-const iconFontStyles = `@font-face {
+if (Platform.OS === 'web') {// Generate the required CSS
+  const iconFontStyles = `@font-face {
     src: url(${iconFont});
     font-family: MaterialCommunityIcons;
   }`;
 
-// Create a stylesheet
-const style = document.createElement('style');
-style.type = 'text/css';
+  // Create a stylesheet
+  const style = document.createElement('style');
+  style.type = 'text/css';
 
-// Append the iconFontStyles to the stylesheet
-if (style.styleSheet) {
-  style.styleSheet.cssText = iconFontStyles;
-} else {
-  style.appendChild(document.createTextNode(iconFontStyles));
+  // Append the iconFontStyles to the stylesheet
+  if (style.styleSheet) {
+    style.styleSheet.cssText = iconFontStyles;
+  } else {
+    style.appendChild(document.createTextNode(iconFontStyles));
+  }
+
+  // Inject the stylesheet into the document head
+  document.head.appendChild(style);
 }
-
-// Inject the stylesheet into the document head
-document.head.appendChild(style);
 
 const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,

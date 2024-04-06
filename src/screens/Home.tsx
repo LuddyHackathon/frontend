@@ -1,31 +1,40 @@
 import React from 'react';
 
-import { Card, Text, Paragraph, Button } from 'react-native-paper';
+import { Dimensions, Linking } from 'react-native';
+import { Text, Button, Surface } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { RootStackParamList } from '../App';
+import { View } from 'react-native';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
-    RootStackParamList,
-    'Home'
+  RootStackParamList,
+  'CareerSpeak'
 >;
 
 type Props = {
-    navigation: HomeScreenNavigationProp;
+  navigation: HomeScreenNavigationProp;
 };
 
 const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
-    return (
-        <Card>
-            <Card.Content>
-                <Text variant='bodyLarge'>Home</Text>
-                <Button mode="contained" onPress={() => navigation.navigate('Details')}>
-                    Go to details
-                </Button>
-                <Paragraph>Body content in paragraph</Paragraph>
-            </Card.Content>
-        </Card>
-    );
+  let isLandscape = Dimensions.get('window').height < Dimensions.get('window').width
+  return (
+    <Surface style={{ minHeight: '100%', justifyContent: 'space-evenly', paddingHorizontal: isLandscape?'33%':'auto' }}>
+      <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+        <Text variant='titleLarge'>Welcome to</Text>
+        <Text variant='displayLarge'>CareerSpeak</Text>
+        <Text variant='titleLarge'>The placement preparation app</Text>
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+        <Button mode="outlined" icon={'github'} onPress={() => Linking.openURL('https://github.com/CareerSpeak')}>
+          GitHub
+        </Button>
+        <Button mode="contained" icon={'rocket-launch'} onPress={() => navigation.navigate('Details')}>
+          Get Started
+        </Button>
+      </View>
+    </Surface>
+  );
 }
 
 export default HomeScreen;

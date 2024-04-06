@@ -1,4 +1,5 @@
 import React from 'react';
+import { Linking } from 'react-native';
 import { getHeaderTitle } from '@react-navigation/elements';
 import { Appbar, IconButton } from 'react-native-paper';
 import { NativeStackNavigationOptions, NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -27,6 +28,10 @@ const Header = ({ navigation, route, options, back }: Props) => {
         <Appbar.Header>
             {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
             <Appbar.Content title={title} />
+            <IconButton
+                icon='github'
+                onPress={() => Linking.openURL('https://github.com/CareerSpeak/CareerSpeak')}
+            />
             <IconButton
                 icon={isThemeDark ? 'brightness-4' : 'brightness-5'}
                 onPress={toggleTheme}

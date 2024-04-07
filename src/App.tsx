@@ -1,14 +1,12 @@
 import React from 'react';
-
 import { NativeStackNavigationOptions, createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import Header from './screens/Header';
 import HomeScreen from './screens/Home';
-import DetailsScreen from './screens/Details';
+import SSOScreen from './screens/SSO';
 
 export type RootStackParamList = {
-  CareerSpeak: undefined,
-  Details: undefined,
+  CareerSpeak: undefined;
+  SSO: undefined;
   Header: undefined;
 };
 
@@ -29,7 +27,7 @@ export default function App() {
         }
       }}>
       <Stack.Screen name='CareerSpeak' component={HomeScreen} />
-      <Stack.Screen name='Details' component={DetailsScreen} />
+      <Stack.Screen name='SSO' component={SSOScreen} />
     </Stack.Navigator>
   );
 }

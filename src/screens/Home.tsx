@@ -1,9 +1,7 @@
 import React from 'react';
-
 import { Dimensions, Linking } from 'react-native';
 import { Text, Button, Surface } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
 import { RootStackParamList } from '../App';
 import { View } from 'react-native';
 
@@ -17,7 +15,12 @@ type Props = {
 };
 
 const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
-  let isLandscape = Dimensions.get('window').height < Dimensions.get('window').width
+  const handleGetStarted = () => {
+    navigation.navigate('SSO');
+  };
+
+  let isLandscape = Dimensions.get('window').height < Dimensions.get('window').width;
+  
   return (
     <Surface style={{ minHeight: '100%', justifyContent: 'space-evenly', paddingHorizontal: isLandscape?'33%':'auto' }}>
       <View style={{ flexDirection: 'column', alignItems: 'center' }}>
@@ -29,12 +32,12 @@ const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
         <Button mode="outlined" icon={'github'} onPress={() => Linking.openURL('https://github.com/CareerSpeak')}>
           GitHub
         </Button>
-        <Button mode="contained" icon={'rocket-launch'} onPress={() => navigation.navigate('Details')}>
+        <Button mode="contained" icon={'rocket-launch'} onPress={handleGetStarted}>
           Get Started
         </Button>
       </View>
     </Surface>
   );
-}
+};
 
 export default HomeScreen;

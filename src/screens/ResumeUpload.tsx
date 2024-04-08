@@ -1,124 +1,81 @@
-import React from 'react';
-import { Dimensions, Linking } from 'react-native';
-import { Text, Button, Surface } from 'react-native-paper';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../App';
-import { View } from 'react-native';
+import React, { useCallback, useState } from 'react';
 
-import DocumentPicker from "react-native-document-picker";
-import { useState, useCallback, useContext } from "react";
-import { SafeAreaView, StyleSheet, ScrollView, StatusBar, ImageBackground, Image } from "react-native";
+import { Platform, View } from 'react-native';
+import { Button, Text } from 'react-native-paper';
+import DocumentPicker from 'react-native-document-picker';
 
+let Uploady: any = null;
+import { useItemErrorListener, useItemFinishListener, useUploady } from '@rpldy/uploady';
 
-import NativeUploady, {
-  UploadyContext,
-  useItemFinishListener,
-  useItemStartListener,
-  useItemErrorListener,
-} from "@rpldy/native-uploady";
+if (Platform.OS === 'web') {
+  import('@rpldy/uploady')
+    .then((module) => {
+      Uploady = module.default;
+    })
+} else {
+  import('@rpldy/native-uploady')
+    .then((module) => {
+      Uploady = module.default;
+    })
+}
+const Upload = () => {
+  const [uploadUrl, setUploadUrl] = useState(false);
+  const uploadyContext = useUploady();
+
+  useItemFinishListener((item) => {
+    const response = JSON.parse(item.uploadResponse.data);
+    console.log(`item ${item.id} finished uploading, response was: `, response);
+    setUploadUrl(response.url);
+    // Once the file is uploaded, you can make a POST request using its URL
+    // Example:
+    // fetch('your_post_url', {
+    //   method: 'POST',
+    //   body: JSON.stringify({ fileUrl: response.url }),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    // .then(response => response.json())
+    // .then(data => console.log(data))
+    // .catch(error => console.error('Error:', error));
+  });
+
+  useItemErrorListener((item) => {
+    console.log(`item ${item.id} upload error: `, item);
+  });
+
+  const pickFile = useCallback(async () => {
+    try {
+      const res = await DocumentPicker.pickSingle({
+        type: [DocumentPicker.types.pdf],
+        copyTo: 'cachesDirectory',
+      });
+
+      const fileUri = res.uri; // Get the URI of the selected file
+      uploadyContext.upload({ files: fileUri }); // Upload the file using its URI
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        console.log('User cancelled the picker, exit any dialogs or menus and move on');
+      } else {
+        throw err;
+      }
+    }
+  }, [uploadyContext]);
+
+  return (
+    <View>
+      <Button onPress={pickFile}>Upload File </Button>
+    </View>
+  );
+}
 
 const ResumeUploadScreen = () => {
   return (
-    <>
-      <NativeUploady        
-        destination={{ url: "http://localhost:65535/data" }}>
-       
-        <SafeAreaView>
-          <ScrollView contentInsetAdjustmentBehavior="automatic">
-
-              <View >
-              <View >
-                <Text >Upload File</Text>
-              </View>
-            </View>
-          </ScrollView>
-        </SafeAreaView>
-
-        <Upload/>
-      </NativeUploady>
-    </>
-  );
-};
-
-
-const Upload = () => {
-    const [uploadUrl, setUploadUrl] = useState(false);
-    const uploadyContext = useContext(UploadyContext);
-  
-    useItemFinishListener((item) => {
-      const response = JSON.parse(item.uploadResponse.data);
-      console.log(`item ${item.id} finished uploading, response was: `, response);
-      setUploadUrl(response.url);
-    });
-  
-    useItemErrorListener((item) => {
-      console.log(`item ${item.id} upload error !!!! `, item);
-    });
-  
-    useItemStartListener((item) => {
-      console.log(`item ${item.id} starting to upload,name = ${item.file.name}`);
-    });
-  
-    const pickFile = useCallback(async () => {
-      try {
-        const res:any = await DocumentPicker.pick({
-          type: [DocumentPicker.types.images],
-        });
-  
-        uploadyContext.upload(res);
-        
-      } catch (err) {
-        if (DocumentPicker.isCancel(err)) {
-          console.log("User cancelled the picker, exit any dialogs or menus and move on");
-        } else {
-          throw err;
-        }
-      }
-    }, [uploadyContext]);
-  
-    return (
+    <Uploady destination={{ url: 'https://192.168.1.168:65535' }} params={'id=resumeFile'}>
       <View>
-        <Button  onPress={pickFile} >chosefile </Button>
-        
+        <Upload />
       </View>
-    );
-  };
-
-
-type ResumeUploadScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  'CareerSpeak'
->;
-
-type Props = {
-  navigation: ResumeUploadScreenNavigationProp;
-};
-
-const App: React.FC<Props> = ({ navigation }: Props) => {
-  const handleGetStarted = () => {
-    navigation.navigate('ResumeUpload');
-  };
-
-  let isLandscape = Dimensions.get('window').height < Dimensions.get('window').width;
-  
-  return (
-    <Surface style={{ minHeight: '100%', justifyContent: 'space-evenly', paddingHorizontal: isLandscape?'33%':'auto' }}>
-      <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-        <Text variant='titleLarge'>Welcome to</Text>
-        <Text variant='displayLarge'>CareerSpeak</Text>
-        <Text variant='titleLarge'>The placement preparation app</Text>
-      </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-        <Button mode="outlined" icon={'github'} onPress={() => Linking.openURL('https://github.com/CareerSpeak')}>
-          GitHub
-        </Button>
-        <Button mode="contained" icon={'emoticon-neutral-outline'} onPress={handleGetStarted}>
-          Get Started
-        </Button>
-      </View>
-    </Surface>
-  );
+    </Uploady>)
 };
 
 export default ResumeUploadScreen;
-

@@ -2,12 +2,13 @@ import React from 'react';
 import { NativeStackNavigationOptions, createNativeStackNavigator } from '@react-navigation/native-stack';
 import Header from './screens/Header';
 import HomeScreen from './screens/Home';
-import SSOScreen from './screens/SSO';
+import ResumeUploadScreen from './screens/ResumeUpload';
 
 export type RootStackParamList = {
   CareerSpeak: undefined;
   SSO: undefined;
   Header: undefined;
+  ResumeUpload: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -27,7 +28,7 @@ export default function App() {
         }
       }}>
       <Stack.Screen name='CareerSpeak' component={HomeScreen} />
-      <Stack.Screen name='SSO' component={SSOScreen} />
+      <Stack.Screen name='ResumeUpload' component={ResumeUploadScreen} />
     </Stack.Navigator>
   );
 }

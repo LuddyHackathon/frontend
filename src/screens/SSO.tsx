@@ -1,43 +1,28 @@
 import React from 'react';
-
-import { View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
-import { useAuth0, Auth0Provider } from 'react-native-auth0';
+import { View, Button } from 'react-native';
 
 const SSOScreen = () => {
-  const { authorize, clearSession, user, error, isLoading } = useAuth0();
-  const onLogin = async () => {
-    try {
-      await authorize();
-    } catch (e) {
-      console.log(e);
-    }
+  const handleSignInWithGoogle = () => {
+    // implement Google sign-in
   };
 
-  const onLogout = async () => {
-    try {
-      await clearSession();
-    } catch (e) {
-      console.log('Log out cancelled');
-    }
+  const handleSignInWithGitHub = () => {
+    // implement GitHub sign-in
   };
-
-  if (isLoading) {
-    return <View ><Text>isLoading</Text></View>;
-  }
-
-  const loggedIn = user !== undefined && user !== null;
+  const handleSignInWithMicrosoft = () => {
+    // implement MS sign-in
+  };
+  const handleSignInWithLinkedin = () => {
+    // implement Linkedin sign-in
+  };
 
   return (
-    <Auth0Provider domain={"dev-rl5hkn5dh1vq3jl3.eu.auth0.com"} clientId={"OhJMAoDmC7TeLKe2Y9WMmWJFCkWAeT5C"}>
-      {loggedIn && <Text>You are logged in as {user.name}</Text>}
-      {!loggedIn && <Text>You are not logged in</Text>}
-      {error && <Text>{error.message}</Text>}
-
-      <Button onPress={loggedIn ? onLogout : onLogin}>
-        {loggedIn ? 'Log Out' : 'Log In'}
-      </Button>
-    </Auth0Provider>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Button title="Sign in with Google" onPress={handleSignInWithGoogle} />
+      <Button title="Sign in with GitHub" onPress={handleSignInWithGitHub} />
+      <Button title="Sign in with GitHub" onPress={handleSignInWithMicrosoft} />
+      <Button title="Sign in with GitHub" onPress={handleSignInWithLinkedin} />
+    </View>
   );
 };
 

@@ -1,23 +1,14 @@
 import React from 'react';
 
-import { Platform, View } from 'react-native';
 import { Button } from 'react-native-paper';
+import { View } from 'react-native';
 
-let DocumentPicker: any = null;
-
-if (Platform.OS !== 'web') {
-  import('react-native-document-picker')
-    .then((module) => {
-      DocumentPicker = module.default
-    })
-}
+import pickFile from '../FilePicker';
 
 const ResumeUploadScreen = () => {
   const onSelectFile = async () => {
     try {
-      const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.pdf],
-      });
+      const res = await pickFile();
       let formData = new FormData();
       formData.append('resumeFile', {
         uri: res.uri,
@@ -38,17 +29,13 @@ const ResumeUploadScreen = () => {
       });
       console.log('RESPONSE', result)
     } catch (error) {
-      if (DocumentPicker.isCancel(error)) {
-        console.log('Canceled');
-      } else {
-        console.error('Unknown Error: ' + error);
-      }
+      console.error(error);
     }
   };
 
   return (
     <View>
-      <Button onPress={onSelectFile}>Upload Resume</Button>
+      <Button onPress={onSelectFile}>Uploa d Resume</Button>
     </View >
   )
 }

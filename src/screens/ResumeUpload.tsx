@@ -1,81 +1,56 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 
 import { Platform, View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
-import DocumentPicker from 'react-native-document-picker';
+import { Button } from 'react-native-paper';
 
-let Uploady: any = null;
-import { useItemErrorListener, useItemFinishListener, useUploady } from '@rpldy/uploady';
+let DocumentPicker: any = null;
 
-if (Platform.OS === 'web') {
-  import('@rpldy/uploady')
+if (Platform.OS !== 'web') {
+  import('react-native-document-picker')
     .then((module) => {
-      Uploady = module.default;
+      DocumentPicker = module.default
     })
-} else {
-  import('@rpldy/native-uploady')
-    .then((module) => {
-      Uploady = module.default;
-    })
-}
-const Upload = () => {
-  const [uploadUrl, setUploadUrl] = useState(false);
-  const uploadyContext = useUploady();
-
-  useItemFinishListener((item) => {
-    const response = JSON.parse(item.uploadResponse.data);
-    console.log(`item ${item.id} finished uploading, response was: `, response);
-    setUploadUrl(response.url);
-    // Once the file is uploaded, you can make a POST request using its URL
-    // Example:
-    // fetch('your_post_url', {
-    //   method: 'POST',
-    //   body: JSON.stringify({ fileUrl: response.url }),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // })
-    // .then(response => response.json())
-    // .then(data => console.log(data))
-    // .catch(error => console.error('Error:', error));
-  });
-
-  useItemErrorListener((item) => {
-    console.log(`item ${item.id} upload error: `, item);
-  });
-
-  const pickFile = useCallback(async () => {
-    try {
-      const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.pdf],
-        copyTo: 'cachesDirectory',
-      });
-
-      const fileUri = res.uri; // Get the URI of the selected file
-      uploadyContext.upload({ files: fileUri }); // Upload the file using its URI
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        console.log('User cancelled the picker, exit any dialogs or menus and move on');
-      } else {
-        throw err;
-      }
-    }
-  }, [uploadyContext]);
-
-  return (
-    <View>
-      <Button onPress={pickFile}>Upload File </Button>
-    </View>
-  );
 }
 
 const ResumeUploadScreen = () => {
+  const onSelectFile = async () => {
+    try {
+      const res = await DocumentPicker.pickSingle({
+        type: [DocumentPicker.types.pdf],
+      });
+      let formData = new FormData();
+      formData.append('resumeFile', {
+        uri: res.uri,
+        type: res.type,
+        name: res.name
+      });
+      console.log('FORMDATA', {
+        uri: res.uri,
+        type: res.type,
+        name: res.name
+      });
+      let result = await fetch('http://192.168.1.168/data', {
+        method: 'POST',
+        headers: {
+          'content-type': 'multipart/form-data'
+        },
+        body: formData
+      });
+      console.log('RESPONSE', result)
+    } catch (error) {
+      if (DocumentPicker.isCancel(error)) {
+        console.log('Canceled');
+      } else {
+        console.error('Unknown Error: ' + error);
+      }
+    }
+  };
+
   return (
-    <Uploady destination={{ url: 'https://192.168.1.168:65535' }} params={'id=resumeFile'}>
-      <View>
-        <Upload />
-      </View>
-    </Uploady>)
-};
+    <View>
+      <Button onPress={onSelectFile}>Upload Resume</Button>
+    </View >
+  )
+}
 
 export default ResumeUploadScreen;

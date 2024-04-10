@@ -2,9 +2,9 @@ import React from 'react';
 
 import { View } from 'react-native';
 import { Button } from 'react-native-paper';
-import DocumentPicker from 'react-native-document-picker';
+import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 
-export const pickFile = async (setMethod: CallableFunction) => {
+const pickFile = async (setMethod: CallableFunction) => {
   const pickerResult = await DocumentPicker.pickSingle({
     type: [DocumentPicker.types.pdf],
     copyTo: 'cachesDirectory'
@@ -13,15 +13,11 @@ export const pickFile = async (setMethod: CallableFunction) => {
 }
 
 const ResumeUploadScreen = () => {
-  const onUpload = async (res: any) => {
+  const onUpload = async (res: DocumentPickerResponse | undefined) => {
     try {
+      if (!res) { return }
       let formData = new FormData();
       formData.append('resumeFile', {
-        uri: res.uri,
-        type: res.type,
-        name: res.name
-      });
-      console.log('FORMDATA', {
         uri: res.uri,
         type: res.type,
         name: res.name
@@ -32,13 +28,13 @@ const ResumeUploadScreen = () => {
           'content-type': 'multipart/form-data'
         },
         body: formData
-      }).then(() => { console.log('got response') })
-      console.log('RESPONSE', result)
+      })
+      console.log('response: ', result)
     } catch (error) {
       console.error(error);
     }
   };
-  const [pickedFile, setPickedFile] = React.useState();
+  const [pickedFile, setPickedFile] = React.useState<DocumentPickerResponse>();
 
   return (
     <View>

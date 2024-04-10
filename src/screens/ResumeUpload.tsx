@@ -15,7 +15,6 @@ const pickFile = async (setMethod: CallableFunction) => {
 const ResumeUploadScreen = () => {
   const onUpload = async (res: DocumentPickerResponse) => {
     try {
-      if (!res) { return }
       let formData = new FormData();
       formData.append('resumeFile', {
         uri: res.uri,

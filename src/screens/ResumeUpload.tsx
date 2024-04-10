@@ -22,14 +22,13 @@ const ResumeUploadScreen = () => {
         type: res.type,
         name: res.name
       });
-      let result = await fetch('http://192.168.1.168/data', {
+      await fetch('http://192.168.1.168/data', {
         method: 'POST',
         headers: {
           'content-type': 'multipart/form-data'
         },
         body: formData
-      })
-      console.log('response: ', result)
+      });
     } catch (error) {
       console.error(error);
     }

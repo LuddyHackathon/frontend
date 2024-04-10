@@ -1,27 +1,9 @@
-import { Platform } from 'react-native';
+import DocumentPicker from 'react-native-document-picker';
 
-let FilePickerModule: any = null;
-
-if (Platform.OS === 'web') {
-    import('use-file-picker')
-        .then((module) => {
-            FilePickerModule = module.default;
-        })
-} else {
-    import('react-native-document-picker')
-        .then((module) => {
-            FilePickerModule = module.default;
-        })
+export const pickFile = async (setMethod: CallableFunction) => {
+  const pickerResult = await DocumentPicker.pickSingle({
+    type: [DocumentPicker.types.pdf],
+    copyTo: 'cachesDirectory'
+  });
+  setMethod(pickerResult)
 }
-
-const pickFile = async () => {
-    if (Platform.OS === 'web') {
-        console.log('web picker');
-    }
-    else {
-        console.log('native picker')
-        return FilePickerModule.pickSingle({ type: [FilePickerModule.types.pdf] });
-    }
-}
-
-export default pickFile;

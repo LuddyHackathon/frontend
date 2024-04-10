@@ -13,7 +13,7 @@ const pickFile = async (setMethod: CallableFunction) => {
 }
 
 const ResumeUploadScreen = () => {
-  const onUpload = async (res: DocumentPickerResponse | undefined) => {
+  const onUpload = async (res: DocumentPickerResponse) => {
     try {
       if (!res) { return }
       let formData = new FormData();
@@ -39,7 +39,7 @@ const ResumeUploadScreen = () => {
     <View>
       <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
         <Button mode='outlined' onPress={() => { pickFile(setPickedFile) }}>Select Resume</Button>
-        <Button mode='outlined' onPress={() => { onUpload(pickedFile) }}>Upload</Button>
+        <Button mode='outlined' onPress={() => { if (pickedFile) { onUpload(pickedFile) } }}>Upload</Button>
       </View>
     </View >
   )

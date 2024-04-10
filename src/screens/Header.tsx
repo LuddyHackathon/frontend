@@ -2,11 +2,12 @@ import React from 'react';
 import { Linking } from 'react-native';
 import { Route } from '@react-navigation/native';
 import { getHeaderTitle } from '@react-navigation/elements';
-import { Appbar, IconButton, Button, Icon } from 'react-native-paper';
+import { Appbar, IconButton, Button } from 'react-native-paper';
 import { NativeStackNavigationOptions, NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { RootStackParamList } from '../App'
 import { PreferencesContext } from '../PreferencesContext';
+import { LogoLight, LogoDark } from '../Logo';
 
 type HeaderScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -26,8 +27,8 @@ const Header = ({ navigation, route, options, back }: Props) => {
 
   return (
     <Appbar.Header>
-      <Button icon={back ? 'arrow-left' : ''} onPress={navigation.goBack} textColor={isThemeDark ? 'white' : 'black'} disabled={back ? false : true}>
-        <Icon size={25} source='package-variant' /> {/** Change to actual logo */}
+      <Button icon={back ? 'arrow-left' : ''} onPress={navigation.goBack} textColor={isThemeDark ? 'white' : 'black'} disabled={back ? false : true} style={{alignContent:'center',alignItems:'center', justifyContent:'center'}}>
+        {isThemeDark ? LogoDark : LogoLight}
       </Button>
       <Appbar.Content title={title} />
       <IconButton

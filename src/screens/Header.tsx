@@ -27,7 +27,7 @@ const Header = ({ navigation, route, options, back }: Props) => {
 
   return (
     <Appbar.Header>
-      <Button icon={back ? 'arrow-left' : ''} onPress={navigation.goBack} textColor={isThemeDark ? 'white' : 'black'} disabled={back ? false : true} style={{alignContent:'center',alignItems:'center', justifyContent:'center'}}>
+      <Button icon={back ? 'arrow-left' : ''} onPress={navigation.goBack} textColor={isThemeDark ? 'white' : 'black'} disabled={back ? false : true} style={{ alignContent: 'center', alignItems: 'center', justifyContent: 'center' }}>
         {isThemeDark ? LogoDark : LogoLight}
       </Button>
       <Appbar.Content title={title} />

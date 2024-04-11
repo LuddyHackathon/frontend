@@ -10,6 +10,7 @@ export type RootStackParamList = {
   SSO: undefined;
   Header: undefined;
   ResumeUpload: undefined;
+  Recommender: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

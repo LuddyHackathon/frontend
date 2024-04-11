@@ -7,7 +7,7 @@ import { View } from 'react-native';
 
 type RecommenderScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'CareerSpeak'
+  'Recommender'
 >;
 
 type Props = {
@@ -16,12 +16,12 @@ type Props = {
 
 const RecommenderScreen: React.FC<Props> = ({ navigation }: Props) => {
   const handleGoBack = () => {
-    navigation.goBack(); // Go back to ResumeUpload
+    navigation.goBack();
   };
 
   const handleConnectBackend = () => {
    
-    fetch('http://backend-url/recommender', {
+    fetch('http://192.168.0.168/recommender', {
       method: 'GET',
     })
       .then(response => response.json())

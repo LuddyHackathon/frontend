@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { View } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Button, Surface } from 'react-native-paper';
 import { useFilePicker } from 'use-file-picker';
 
 const ResumeUploadScreen = () => {
@@ -22,12 +22,12 @@ const ResumeUploadScreen = () => {
     multiple: false
   });
   return (
-    <View>
+    <Surface style={{ minHeight: '100%' }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
         <Button mode='outlined' onPress={openFilePicker}>Select Resume</Button>
         <Button mode='outlined' onPress={() => { onUpload(plainFiles[0]) }}>Upload</Button>
       </View>
-    </View >
+    </Surface>
   )
 }
 

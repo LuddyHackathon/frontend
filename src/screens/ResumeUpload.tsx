@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { View } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Button, Surface } from 'react-native-paper';
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 
 const pickFile = async (setMethod: CallableFunction) => {
@@ -35,12 +35,12 @@ const ResumeUploadScreen = () => {
   const [pickedFile, setPickedFile] = React.useState<DocumentPickerResponse>();
 
   return (
-    <View>
+    <Surface style={{ minHeight: '100%' }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
         <Button mode='outlined' onPress={() => { pickFile(setPickedFile) }}>Select Resume</Button>
         <Button mode='outlined' onPress={() => { if (pickedFile) { onUpload(pickedFile) } }}>Upload</Button>
       </View>
-    </View >
+    </Surface>
   )
 }
 

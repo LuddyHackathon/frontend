@@ -2,13 +2,19 @@ import React from 'react';
 
 import { View } from 'react-native';
 import { Button, Surface } from 'react-native-paper';
-import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
+import DocumentPicker, { DocumentPickerResponse, isCancel } from 'react-native-document-picker';
 
 const pickFile = async (setMethod: CallableFunction) => {
   const pickerResult = await DocumentPicker.pickSingle({
     type: [DocumentPicker.types.pdf],
     copyTo: 'cachesDirectory'
-  });
+  }).catch((error) => {
+    if (isCancel(error)) {
+      console.log('Cancelled')
+    } else {
+      console.error(error)
+    }
+  })
   setMethod(pickerResult)
 }
 

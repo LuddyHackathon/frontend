@@ -1,8 +1,10 @@
 import React from 'react';
 
 import { View } from 'react-native';
-import { Button, Surface } from 'react-native-paper';
+import { Button, Surface, Text } from 'react-native-paper';
 import DocumentPicker, { DocumentPickerResponse, isCancel } from 'react-native-document-picker';
+
+import { fetchLanguageResult } from '../DataFetcher';
 
 const pickFile = async (setMethod: CallableFunction) => {
   const pickerResult = await DocumentPicker.pickSingle({
@@ -19,7 +21,7 @@ const pickFile = async (setMethod: CallableFunction) => {
 }
 
 const ResumeUploadScreen = () => {
-  const onUpload = async (res: DocumentPickerResponse) => {
+  const onUpload = async (res: DocumentPickerResponse, uploadComplete: CallableFunction) => {
     try {
       let formData = new FormData();
       formData.append('resumeFile', {
@@ -34,19 +36,35 @@ const ResumeUploadScreen = () => {
         },
         body: formData
       });
+      uploadComplete(true);
     } catch (error) {
       console.error(error);
     }
   };
-  const [pickedFile, setPickedFile] = React.useState<DocumentPickerResponse>();
+
+  const [pickedFile, setPickedFile] = React.useState<DocumentPickerResponse>({ name: null, uri: '', fileCopyUri: null, type: null, size: null });
+  const [uploadSuccessful, setUploadSuccessful] = React.useState(false);
+  const [languageResult, setLanguageResult] = React.useState<string>('')
 
   return (
     <Surface style={{ minHeight: '100%' }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-        <Button mode='outlined' onPress={() => { pickFile(setPickedFile) }}>Select Resume</Button>
-        <Button mode='outlined' onPress={() => { if (pickedFile) { onUpload(pickedFile) } }}>Upload</Button>
-      </View>
-    </Surface>
+      {!uploadSuccessful ?
+        <View style={{ minHeight: '100%', alignContent: 'center', justifyContent: 'space-evenly' }}>
+          {pickedFile.name ?
+            <View style={{ alignItems: 'center' }}>
+              <Text>Selected: {pickedFile.name}</Text>
+              <Text>Size: {pickedFile.size ? pickedFile.size / 1000 : ''}kB</Text>
+            </View> : null}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around', }}>
+            <Button mode='outlined' onPress={() => { pickFile(setPickedFile) }}>Select Resume</Button>
+            <Button mode='outlined' onPress={() => { onUpload(pickedFile, setUploadSuccessful) }}>Upload</Button>
+          </View>
+        </View>
+        :
+        <Surface style={{ minHeight: '50%', padding: '5%', margin: '5%', borderRadius: 25 }}>
+          <Text>{fetchLanguageResult(pickedFile.name, setLanguageResult)}</Text>
+        </Surface>}
+    </Surface >
   )
 }
 

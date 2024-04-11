@@ -3,6 +3,7 @@ import { NativeStackNavigationOptions, createNativeStackNavigator } from '@react
 import Header from './screens/Header';
 import HomeScreen from './screens/Home';
 import ResumeUploadScreen from './screens/ResumeUpload';
+import RecommenderScreen from './screens/Recommender';
 
 export type RootStackParamList = {
   CareerSpeak: undefined;
@@ -29,6 +30,7 @@ export default function App() {
       }}>
       <Stack.Screen name='CareerSpeak' component={HomeScreen} />
       <Stack.Screen name='ResumeUpload' component={ResumeUploadScreen} />
+      <Stack.Screen name='Recommender' component={RecommenderScreen} />
     </Stack.Navigator>
   );
 }

@@ -17,7 +17,7 @@ const ResumeUploadScreen = () => {
       fetchLanguageResult(res.name, function (err: string, data: Object) {
         if (err) { throw err; }
         // @ts-expect-error
-        setLanguageResult(data.text);
+        setLanguageResult(data.terminal);
         // @ts-expect-error
         setGrammarResult(data.grammar);
       });

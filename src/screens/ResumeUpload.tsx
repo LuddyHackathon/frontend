@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { View } from 'react-native';
-import { Button, Surface, Text } from 'react-native-paper';
+import { ScrollView, View } from 'react-native';
+import { ActivityIndicator, Button, Surface, Text } from 'react-native-paper';
 import DocumentPicker, { DocumentPickerResponse, isCancel } from 'react-native-document-picker';
 
 import { fetchLanguageResult } from '../DataFetcher';
@@ -21,7 +21,7 @@ const pickFile = async (setMethod: CallableFunction) => {
 }
 
 const ResumeUploadScreen = () => {
-  const onUpload = async (res: DocumentPickerResponse, uploadComplete: CallableFunction) => {
+  const onUpload = async (res: DocumentPickerResponse) => {
     try {
       let formData = new FormData();
       formData.append('resumeFile', {
@@ -36,7 +36,8 @@ const ResumeUploadScreen = () => {
         },
         body: formData
       });
-      uploadComplete(true);
+      setUploadSuccessful(true);
+      fetchLanguageResult(res.name, setLanguageResult);
     } catch (error) {
       console.error(error);
     }
@@ -57,14 +58,16 @@ const ResumeUploadScreen = () => {
             </View> : null}
           <View style={{ flexDirection: 'row', justifyContent: 'space-around', }}>
             <Button mode='outlined' onPress={() => { pickFile(setPickedFile) }}>Select Resume</Button>
-            <Button mode='outlined' onPress={() => { onUpload(pickedFile, setUploadSuccessful) }}>Upload</Button>
+            <Button mode='outlined' onPress={() => { onUpload(pickedFile) }}>Upload</Button>
           </View>
         </View>
         :
-        <Surface style={{ minHeight: '50%', padding: '5%', margin: '5%', borderRadius: 25 }}>
-          <Text>{fetchLanguageResult(pickedFile.name, setLanguageResult)}</Text>
+        <Surface style={{ minHeight: '50%', maxHeight: '75%', padding: '5%', margin: '5%', borderRadius: 25 }}>
+          <ScrollView>
+            {languageResult ? <Text>{languageResult}</Text> : <ActivityIndicator animating={true} />}
+          </ScrollView>
         </Surface>}
-    </Surface >
+    </Surface>
   )
 }
 

@@ -37,7 +37,13 @@ const ResumeUploadScreen = () => {
         body: formData
       });
       setUploadSuccessful(true);
-      fetchLanguageResult(res.name, setLanguageResult);
+      fetchLanguageResult(res.name, function (err: string, data: Object) {
+        if (err) { throw err; }
+        // @ts-expect-error
+        setLanguageResult(data.terminal);
+        // @ts-expect-error
+        setGrammarResult(data.grammar);
+      });
     } catch (error) {
       console.error(error);
     }
@@ -45,7 +51,8 @@ const ResumeUploadScreen = () => {
 
   const [pickedFile, setPickedFile] = React.useState<DocumentPickerResponse>({ name: null, uri: '', fileCopyUri: null, type: null, size: null });
   const [uploadSuccessful, setUploadSuccessful] = React.useState(false);
-  const [languageResult, setLanguageResult] = React.useState<string>('')
+  const [languageResult, setLanguageResult] = React.useState<string>('');
+  const [grammarResult, setGrammarResult] = React.useState<Object[]>();
 
   return (
     <Surface style={{ minHeight: '100%' }}>

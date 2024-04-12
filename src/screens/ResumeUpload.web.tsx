@@ -34,8 +34,8 @@ const ResumeUploadScreen = () => {
     onFilesSelected: (files) => { setPickedFile(files.plainFiles[0]) }
   });
   const [uploadSuccessful, setUploadSuccessful] = React.useState(false);
-  const [languageResult, setLanguageResult] = React.useState<string>('')
-  const [grammarResult, setGrammarResult] = React.useState<Object[]>()
+  const [languageResult, setLanguageResult] = React.useState<string>('');
+  const [grammarResult, setGrammarResult] = React.useState<Object[]>();
 
   return (
     <Surface style={{ minHeight: '100%' }}>
@@ -52,11 +52,14 @@ const ResumeUploadScreen = () => {
           </View>
         </View>
         :
-        <Surface style={{ minHeight: '50%', maxHeight: '75%', padding: '5%', margin: '5%', borderRadius: 25 }}>
-          <ScrollView>
-            {languageResult ? <Text>{languageResult}</Text> : <ActivityIndicator animating={true} />}
-          </ScrollView>
-        </Surface>}
+        <View style={{ minHeight: '100%', flexDirection: 'column' }}>
+          <Surface style={{ maxHeight: '50%', padding: '1%', margin: '1%', borderRadius: 25 }}>
+            <ScrollView style={{ minHeight: '50%', maxHeight: '75%' }}>
+              {languageResult ? <Text>{languageResult}</Text> : <ActivityIndicator animating={true} />}
+            </ScrollView>
+          </Surface>
+          <Button mode='contained'>Next</Button>
+        </View>}
     </Surface>
   )
 }

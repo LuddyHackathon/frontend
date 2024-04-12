@@ -95,6 +95,7 @@ module.exports = argv => {
       // Plugin that takes public/index.html and injects script tags with the built bundles
       new HtmlWebpackPlugin({
         template: path.resolve(appDirectory, 'web/public/index.html'),
+        favicon: path.resolve(appDirectory, 'src/assets/logo.svg')
       }),
 
       // Defines __DEV__ and process.env as not being null

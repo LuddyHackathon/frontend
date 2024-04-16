@@ -2,9 +2,11 @@ import React from 'react';
 
 import { ScrollView, View } from 'react-native';
 import { ActivityIndicator, Button, Surface, Text } from 'react-native-paper';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import DocumentPicker, { DocumentPickerResponse, isCancel } from 'react-native-document-picker';
 
 import { fetchLanguageResult } from '../DataFetcher';
+import { RootStackParamList } from '../App';
 
 const pickFile = async (setMethod: CallableFunction) => {
   const pickerResult = await DocumentPicker.pickSingle({
@@ -20,7 +22,16 @@ const pickFile = async (setMethod: CallableFunction) => {
   setMethod(pickerResult)
 }
 
-const ResumeUploadScreen = () => {
+type ResumeUploadScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'ResumeUpload'
+>;
+
+type Props = {
+  navigation: ResumeUploadScreenNavigationProp;
+};
+
+const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
   const onUpload = async (res: DocumentPickerResponse) => {
     try {
       let formData = new FormData();
@@ -40,9 +51,9 @@ const ResumeUploadScreen = () => {
       fetchLanguageResult(res.name, function (err: string, data: Object) {
         if (err) { throw err; }
         // @ts-expect-error
-        setTextResult(data.terminal);
+        setTextResult(data.text);
         // @ts-expect-error
-        setGrammarResult(data.grammar);
+        setGrammarResult(data.terminal);
       });
     } catch (error) {
       console.error(error);
@@ -52,7 +63,7 @@ const ResumeUploadScreen = () => {
   const [pickedFile, setPickedFile] = React.useState<DocumentPickerResponse>({ name: null, uri: '', fileCopyUri: null, type: null, size: null });
   const [uploadSuccessful, setUploadSuccessful] = React.useState(false);
   const [textResult, setTextResult] = React.useState<string>('');
-  const [grammarResult, setGrammarResult] = React.useState<Object[]>();
+  const [grammarResult, setGrammarResult] = React.useState<string>('');
 
   return (
     <Surface style={{ minHeight: '100%' }}>
@@ -69,19 +80,19 @@ const ResumeUploadScreen = () => {
           </View>
         </View>
         :
-        <View style={{justifyContent:'space-between'}}>
+        <View style={{ justifyContent: 'space-between' }}>
           <Surface style={{ minHeight: '50%', maxHeight: '75%', padding: '5%', margin: '5%', borderRadius: 25 }}>
             <ScrollView>
-              {textResult ? <Text>{textResult}</Text> : <ActivityIndicator animating={true} />}
+              {grammarResult ? <Text>{grammarResult}</Text> : <ActivityIndicator animating={true} />}
             </ScrollView>
           </Surface>
-          <View style={{flexDirection:'row', justifyContent:'space-around'}}>
-            <Button mode='contained'>See Recommendation</Button>
-            <Button mode='contained'>Take Interview</Button>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            <Button mode='contained' onPress={() => navigation.navigate('Recommendation', { text: textResult })}>See Recommendation</Button>
+            <Button mode='contained' onPress={() => navigation.navigate('Recommendation', { text: textResult })}>Take Interview</Button>
           </View>
         </View>}
     </Surface>
-  )
+  );
 }
 
 export default ResumeUploadScreen;

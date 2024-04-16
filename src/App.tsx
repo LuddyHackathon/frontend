@@ -3,14 +3,14 @@ import { NativeStackNavigationOptions, createNativeStackNavigator } from '@react
 import Header from './screens/Header';
 import HomeScreen from './screens/Home';
 import ResumeUploadScreen from './screens/ResumeUpload';
-import RecommenderScreen from './screens/Recommender';
+import RecommendationScreen from './screens/Recommendation';
 
 export type RootStackParamList = {
   CareerSpeak: undefined;
   SSO: undefined;
   Header: undefined;
   ResumeUpload: undefined;
-  Recommender: undefined;
+  Recommendation: { text: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -31,7 +31,7 @@ export default function App() {
       }}>
       <Stack.Screen name='CareerSpeak' component={HomeScreen} />
       <Stack.Screen name='ResumeUpload' component={ResumeUploadScreen} />
-      <Stack.Screen name='Recommender' component={RecommenderScreen} />
+      <Stack.Screen name='Recommendation' component={RecommendationScreen} initialParams={{ text: '42' }} />
     </Stack.Navigator>
   );
 }

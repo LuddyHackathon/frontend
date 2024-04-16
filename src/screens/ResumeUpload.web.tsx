@@ -2,10 +2,22 @@ import React from 'react';
 
 import { ScrollView, View } from 'react-native';
 import { ActivityIndicator, Button, Surface, Text } from 'react-native-paper';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useFilePicker } from 'use-file-picker';
-import { fetchLanguageResult } from '../DataFetcher';
 
-const ResumeUploadScreen = () => {
+import { fetchLanguageResult } from '../DataFetcher';
+import { RootStackParamList } from '../App';
+
+type ResumeUploadScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'ResumeUpload'
+>;
+
+type Props = {
+  navigation: ResumeUploadScreenNavigationProp;
+};
+
+const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
   const onUpload = async (res: File) => {
     try {
       let formData = new FormData();
@@ -17,9 +29,9 @@ const ResumeUploadScreen = () => {
       fetchLanguageResult(res.name, function (err: string, data: Object) {
         if (err) { throw err; }
         // @ts-expect-error
-        setTextResult(data.terminal);
+        setTextResult(data.text);
         // @ts-expect-error
-        setGrammarResult(data.grammar);
+        setGrammarResult(data.terminal);
       });
     } catch (error) {
       console.error(error);
@@ -35,7 +47,7 @@ const ResumeUploadScreen = () => {
   });
   const [uploadSuccessful, setUploadSuccessful] = React.useState(false);
   const [textResult, setTextResult] = React.useState<string>('');
-  const [grammarResult, setGrammarResult] = React.useState<Object[]>();
+  const [grammarResult, setGrammarResult] = React.useState<string>('');
 
   return (
     <Surface style={{ minHeight: '100%' }}>
@@ -57,17 +69,17 @@ const ResumeUploadScreen = () => {
           <View style={{ height: '100%' }}>
             <Surface style={{ height: '85%', padding: '1%', margin: '1%', borderRadius: 25 }}>
               <ScrollView>
-                {textResult ? <Text>{textResult}</Text> : <ActivityIndicator animating={true} />}
+                {grammarResult ? <Text>{grammarResult}</Text> : <ActivityIndicator animating={true} />}
               </ScrollView>
             </Surface>
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-            <Button mode='contained'>See Recommendation</Button>
-            <Button mode='contained'>Take Interview</Button>
+            <Button mode='contained' onPress={() => navigation.navigate('Recommendation', { text: textResult })}>See Recommendation</Button>
+            <Button mode='contained' onPress={() => navigation.navigate('Recommendation', { text: textResult })}>Take Interview</Button>
           </View>
         </View>}
     </Surface>
-  )
+  );
 }
 
 export default ResumeUploadScreen;

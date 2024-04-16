@@ -34,7 +34,7 @@ const ResumeUploadScreen = () => {
     onFilesSelected: (files) => { setPickedFile(files.plainFiles[0]) }
   });
   const [uploadSuccessful, setUploadSuccessful] = React.useState(false);
-  const [languageResult, setLanguageResult] = React.useState<string>('');
+  const [textResult, setLanguageResult] = React.useState<string>('');
   const [grammarResult, setGrammarResult] = React.useState<Object[]>();
 
   return (
@@ -55,7 +55,7 @@ const ResumeUploadScreen = () => {
         <View style={{ minHeight: '100%', flexDirection: 'column' }}>
           <Surface style={{ maxHeight: '50%', padding: '1%', margin: '1%', borderRadius: 25 }}>
             <ScrollView style={{ minHeight: '50%', maxHeight: '75%' }}>
-              {languageResult ? <Text>{languageResult}</Text> : <ActivityIndicator animating={true} />}
+              {textResult ? <Text>{textResult}</Text> : <ActivityIndicator animating={true} />}
             </ScrollView>
           </Surface>
           <Button mode='contained'>Next</Button>

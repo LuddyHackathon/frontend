@@ -20,9 +20,9 @@ const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   };
 
   let isLandscape = Dimensions.get('window').height < Dimensions.get('window').width;
-  
+
   return (
-    <Surface style={{ minHeight: '100%', justifyContent: 'space-evenly', paddingHorizontal: isLandscape?'33%':'auto' }}>
+    <Surface style={{ minHeight: '100%', justifyContent: 'space-evenly', paddingHorizontal: isLandscape ? '33%' : 'auto' }}>
       <View style={{ flexDirection: 'column', alignItems: 'center' }}>
         <Text variant='titleLarge'>Welcome to</Text>
         <Text variant='displayLarge'>CareerSpeak</Text>

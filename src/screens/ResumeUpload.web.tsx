@@ -17,7 +17,7 @@ const ResumeUploadScreen = () => {
       fetchLanguageResult(res.name, function (err: string, data: Object) {
         if (err) { throw err; }
         // @ts-expect-error
-        setLanguageResult(data.terminal);
+        setTextResult(data.terminal);
         // @ts-expect-error
         setGrammarResult(data.grammar);
       });
@@ -34,7 +34,7 @@ const ResumeUploadScreen = () => {
     onFilesSelected: (files) => { setPickedFile(files.plainFiles[0]) }
   });
   const [uploadSuccessful, setUploadSuccessful] = React.useState(false);
-  const [textResult, setLanguageResult] = React.useState<string>('');
+  const [textResult, setTextResult] = React.useState<string>('');
   const [grammarResult, setGrammarResult] = React.useState<Object[]>();
 
   return (
@@ -46,19 +46,25 @@ const ResumeUploadScreen = () => {
               <Text>Selected: {pickedFile.name}</Text>
               <Text>Size: {pickedFile.size ? pickedFile.size / 1000 : ''}kB</Text>
             </View> : null}
-          <View style={{ flexDirection: 'row', justifyContent: 'space-around', }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingHorizontal: '33%' }}>
             <Button mode='outlined' onPress={() => { openFilePicker() }}>Select Resume</Button>
             <Button mode='outlined' onPress={() => { onUpload(pickedFile) }}>Upload</Button>
           </View>
         </View>
         :
-        <View style={{ minHeight: '100%', flexDirection: 'column' }}>
-          <Surface style={{ maxHeight: '50%', padding: '1%', margin: '1%', borderRadius: 25 }}>
-            <ScrollView style={{ minHeight: '50%', maxHeight: '75%' }}>
-              {textResult ? <Text>{textResult}</Text> : <ActivityIndicator animating={true} />}
-            </ScrollView>
-          </Surface>
-          <Button mode='contained'>Next</Button>
+        // @ts-expect-error using vh works with webpack
+        <View style={{ height: '80vh', justifyContent: 'space-between' }}>
+          <View style={{ height: '100%' }}>
+            <Surface style={{ height: '85%', padding: '1%', margin: '1%', borderRadius: 25 }}>
+              <ScrollView>
+                {textResult ? <Text>{textResult}</Text> : <ActivityIndicator animating={true} />}
+              </ScrollView>
+            </Surface>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            <Button mode='contained'>See Recommendation</Button>
+            <Button mode='contained'>Take Interview</Button>
+          </View>
         </View>}
     </Surface>
   )

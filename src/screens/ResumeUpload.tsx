@@ -40,7 +40,7 @@ const ResumeUploadScreen = () => {
       fetchLanguageResult(res.name, function (err: string, data: Object) {
         if (err) { throw err; }
         // @ts-expect-error
-        setLanguageResult(data.terminal);
+        setTextResult(data.terminal);
         // @ts-expect-error
         setGrammarResult(data.grammar);
       });
@@ -51,7 +51,7 @@ const ResumeUploadScreen = () => {
 
   const [pickedFile, setPickedFile] = React.useState<DocumentPickerResponse>({ name: null, uri: '', fileCopyUri: null, type: null, size: null });
   const [uploadSuccessful, setUploadSuccessful] = React.useState(false);
-  const [languageResult, setLanguageResult] = React.useState<string>('');
+  const [textResult, setTextResult] = React.useState<string>('');
   const [grammarResult, setGrammarResult] = React.useState<Object[]>();
 
   return (
@@ -69,11 +69,17 @@ const ResumeUploadScreen = () => {
           </View>
         </View>
         :
-        <Surface style={{ minHeight: '50%', maxHeight: '75%', padding: '5%', margin: '5%', borderRadius: 25 }}>
-          <ScrollView>
-            {languageResult ? <Text>{languageResult}</Text> : <ActivityIndicator animating={true} />}
-          </ScrollView>
-        </Surface>}
+        <View style={{justifyContent:'space-between'}}>
+          <Surface style={{ minHeight: '50%', maxHeight: '75%', padding: '5%', margin: '5%', borderRadius: 25 }}>
+            <ScrollView>
+              {textResult ? <Text>{textResult}</Text> : <ActivityIndicator animating={true} />}
+            </ScrollView>
+          </Surface>
+          <View style={{flexDirection:'row', justifyContent:'space-around'}}>
+            <Button mode='contained'>See Recommendation</Button>
+            <Button mode='contained'>Take Interview</Button>
+          </View>
+        </View>}
     </Surface>
   )
 }

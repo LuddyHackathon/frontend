@@ -7,6 +7,7 @@ import DocumentPicker, { DocumentPickerResponse, isCancel } from 'react-native-d
 
 import { fetchLanguageResult } from '../DataFetcher';
 import { RootStackParamList } from '../App';
+import { API_URL } from '@env';
 
 const pickFile = async (setMethod: CallableFunction) => {
   const pickerResult = await DocumentPicker.pickSingle({
@@ -40,7 +41,7 @@ const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
         type: res.type,
         name: res.name
       });
-      await fetch('http://192.168.1.168/data', {
+      await fetch(`${API_URL}/data`, {
         method: 'POST',
         headers: {
           'content-type': 'multipart/form-data'

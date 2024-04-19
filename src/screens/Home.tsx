@@ -1,9 +1,8 @@
 import React from 'react';
-import { Dimensions, Linking } from 'react-native';
+import { Dimensions, Linking, View } from 'react-native';
 import { Text, Button, Surface } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
-import { View } from 'react-native';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,

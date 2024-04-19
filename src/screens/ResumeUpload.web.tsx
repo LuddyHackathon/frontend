@@ -7,6 +7,7 @@ import { useFilePicker } from 'use-file-picker';
 
 import { fetchLanguageResult } from '../DataFetcher';
 import { RootStackParamList } from '../App';
+import { API_URL } from '@env';
 
 type ResumeUploadScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -23,7 +24,7 @@ const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
       let formData = new FormData();
       formData.append('resumeFile', res);
       let xhr = new XMLHttpRequest();
-      xhr.open('POST', 'http://192.168.1.168/data');
+      xhr.open('POST', `${API_URL}/data`);
       xhr.send(formData);
       setUploadSuccessful(true);
       fetchLanguageResult(res.name, function (err: string, data: Object) {

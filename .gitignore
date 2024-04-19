@@ -1,3 +1,7 @@
+# Env for api url
+#
+.env
+
 # Web
 #
 web/dist

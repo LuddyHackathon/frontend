@@ -44,7 +44,7 @@ const RecommendationScreen: React.FC<Props> = ({ route, navigation }: Props) => 
       <View style={{ height: '50%' }}>
         <Text variant='headlineSmall'>Found Keywords:</Text>
         <ScrollView>
-          <Text variant='bodyLarge'>{ console.log(keywords) }{keywords.join(', ')}</Text>
+          <Text variant='bodyLarge'>{keywords.join(', ')}</Text>
         </ScrollView>
       </View>
       <View style={{ height: '15%', alignItems: 'center' }}>

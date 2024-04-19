@@ -76,7 +76,7 @@ const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
             <Button mode='contained' onPress={() => navigation.navigate('Recommendation', { text: textResult })}>See Recommendation</Button>
-            <Button mode='contained' onPress={() => navigation.navigate('Recommendation', { text: textResult })}>Take Interview</Button>
+            <Button mode='contained' onPress={() => navigation.navigate('InterviewerHome')}>Take Interview</Button>
           </View>
         </View>}
     </Surface>

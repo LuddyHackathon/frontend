@@ -48,7 +48,7 @@ const RecommendationScreen: React.FC<Props> = ({ route, navigation }: Props) => 
         </ScrollView>
       </View>
       <View style={{ height: '15%', alignItems: 'center' }}>
-        <Button mode='contained' style={{ width: 'auto' }} onPress={() => navigation.navigate('CareerSpeak')}>Take Interview</Button>
+        <Button mode='contained' style={{ width: 'auto' }} onPress={() => navigation.navigate('InterviewerHome')}>Take Interview</Button>
       </View>
     </Surface>
   );

@@ -4,6 +4,7 @@ import Header from './screens/Header';
 import HomeScreen from './screens/Home';
 import ResumeUploadScreen from './screens/ResumeUpload';
 import RecommendationScreen from './screens/Recommendation';
+import InterviewerHomeScreen from './screens/InterviewerHome';
 
 export type RootStackParamList = {
   CareerSpeak: undefined;
@@ -11,6 +12,7 @@ export type RootStackParamList = {
   Header: undefined;
   ResumeUpload: undefined;
   Recommendation: { text: string };
+  InterviewerHome: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -18,7 +20,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function App() {
   return (
     <Stack.Navigator
-      initialRouteName='CareerSpeak'
+      initialRouteName='InterviewerHome'
       screenOptions={{
         header: (props) => {
           const options: NativeStackNavigationOptions = {};
@@ -32,6 +34,7 @@ export default function App() {
       <Stack.Screen name='CareerSpeak' component={HomeScreen} />
       <Stack.Screen name='ResumeUpload' component={ResumeUploadScreen} />
       <Stack.Screen name='Recommendation' component={RecommendationScreen} initialParams={{ text: '42' }} />
+      <Stack.Screen name='InterviewerHome' component={InterviewerHomeScreen} />
     </Stack.Navigator>
   );
 }

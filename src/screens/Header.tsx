@@ -1,5 +1,5 @@
 import React from 'react';
-import { Linking } from 'react-native';
+import { Linking, View } from 'react-native';
 import { Route } from '@react-navigation/native';
 import { getHeaderTitle } from '@react-navigation/elements';
 import { Appbar, IconButton, Button } from 'react-native-paper';
@@ -28,7 +28,7 @@ const Header = ({ navigation, route, options, back }: Props) => {
   return (
     <Appbar.Header>
       <Button icon={back ? 'arrow-left' : ''} onPress={navigation.goBack} textColor={isThemeDark ? 'white' : 'black'} disabled={back ? false : true} style={{ alignContent: 'center', alignItems: 'center', justifyContent: 'center' }}>
-        {isThemeDark ? LogoDark : LogoLight}
+        <View style={{height: 24}}>{isThemeDark ? LogoDark : LogoLight}</View>
       </Button>
       <Appbar.Content title={title} />
       <IconButton

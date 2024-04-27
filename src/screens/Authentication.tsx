@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, View, useWindowDimensions } from 'react-native';
+import { Pressable, View, TextInput as NativeTextInput, useWindowDimensions } from 'react-native';
 import { Button, Divider, Surface, Text, TextInput } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -42,10 +42,12 @@ const AuthenticationScreen: React.FC<Props> = ({ navigation }: Props) => {
 
   const [accessToken, setAccessToken] = useAccessToken();
 
+  const passwordRef = React.useRef<NativeTextInput>(null);
+
   return (
-    <Surface style={{ height: '100%', paddingVertical: 25, justifyContent: 'center' }}>
+    <Surface style={{ height: '100%', padding: 25, justifyContent: 'center' }}>
       <View style={{ height: 600, justifyContent: 'space-evenly', flexDirection: 'row' }}>
-        <Surface elevation={2} style={{ height: '100%', width: width / height > 0.7 ? 350 : '100%', borderRadius: 25, padding: 25 }}>
+        <Surface elevation={2} style={{ height: '100%', width: width / height > 0.7 ? 360 : '100%', borderRadius: 25, padding: 25 }}>
           <View style={{ alignItems: 'center', height: 50 }}>
             {isThemeDark ? LogoDark : LogoLight}
           </View>
@@ -54,18 +56,29 @@ const AuthenticationScreen: React.FC<Props> = ({ navigation }: Props) => {
           <TextInput
             label='Email'
             value={email}
+            autoCorrect={true}
+            autoComplete='email'
+            textContentType='emailAddress'
+            keyboardType='email-address'
             autoCapitalize='none'
-            returnKeyType='next'
+            enterKeyHint='next'
             mode='flat'
+            enablesReturnKeyAutomatically={true}
             blurOnSubmit={false}
             onChangeText={email => setEmail(email)}
+            onSubmitEditing={() => { passwordRef.current?.focus(); }}
             style={{ marginVertical: 25 }} />
           <TextInput
             label='Password'
             value={password}
+            ref={passwordRef}
+            autoCorrect={false}
+            textContentType='password'
+            autoComplete='current-password'
             autoCapitalize='none'
-            returnKeyType='done'
+            enterKeyHint='done'
             mode='flat'
+            enablesReturnKeyAutomatically={true}
             blurOnSubmit={false}
             onChangeText={password => setPassword(password)}
             secureTextEntry={hidePass}

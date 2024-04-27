@@ -6,9 +6,10 @@ export type LanguageResult = {
   grammar: string
 };
 
-export function fetchLanguageResult(fileName: string | null, done: CallableFunction) {
+export function fetchLanguageResult(fileName: string | null, token: string, done: CallableFunction) {
   let xhr = new XMLHttpRequest();
   xhr.open('POST', `${API_URL}/grammar?file=${fileName}`);
+  xhr.setRequestHeader('Authorization', `Bearer ${token}`);
   xhr.onload = function () {
     done(null, JSON.parse(xhr.response));
   };
@@ -23,11 +24,12 @@ export type RecommenderResult = {
   recommendation: string
 };
 
-export function fetchRecommenderResult(text: string, done: CallableFunction) {
+export function fetchRecommenderResult(text: string, token: string, done: CallableFunction) {
   let xhr = new XMLHttpRequest();
   let formData = new FormData();
   formData.append('text', text);
   xhr.open('POST', `${API_URL}/recommender`);
+  xhr.setRequestHeader('Authorization', `Bearer ${token}`);
   xhr.onload = function () {
     done(null, JSON.parse(xhr.response));
   };
@@ -50,6 +52,21 @@ export function fetchAuthenticationResult(email: string, password: string, endpo
   xhr.open('POST', `${API_URL}/${endpoint}`);
   xhr.onload = function () {
     done(null, JSON.parse(xhr.response));
+  };
+  xhr.onerror = function () {
+    done(JSON.parse(xhr.response));
+  };
+  xhr.send(formData);
+};
+
+export function uploadFile(file: any, token: string, done: CallableFunction) {
+  let formData = new FormData();
+  formData.append('resumeFile', file);
+  let xhr = new XMLHttpRequest();
+  xhr.open('POST', `${API_URL}/data`);
+  xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+  xhr.onload = function () {
+    done(null);
   };
   xhr.onerror = function () {
     done(JSON.parse(xhr.response));

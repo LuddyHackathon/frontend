@@ -1,13 +1,14 @@
 import React from 'react';
 
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, useWindowDimensions } from 'react-native';
 import { ActivityIndicator, Button, Surface, Text } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import DocumentPicker, { DocumentPickerResponse, isCancel } from 'react-native-document-picker';
 
-import { fetchLanguageResult, LanguageResult } from '../DataFetcher';
+import { uploadFile, fetchLanguageResult, LanguageResult } from '../DataFetcher';
 import { RootStackParamList } from '../App';
 import { API_URL } from '@env';
+import { useAccessToken } from '../AccessTokenProvider';
 
 const pickFile = async (setMethod: CallableFunction) => {
   const pickerResult = await DocumentPicker.pickSingle({
@@ -33,8 +34,10 @@ type Props = {
 };
 
 const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
-  const onUpload = async (res: DocumentPickerResponse) => {
+  const onUpload = async (res: DocumentPickerResponse, accessToken: string) => {
     try {
+      uploadFile(res, accessToken, () => { })
+
       let formData = new FormData();
       formData.append('resumeFile', {
         uri: res.uri,
@@ -44,13 +47,15 @@ const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
       await fetch(`${API_URL}/data`, {
         method: 'POST',
         headers: {
-          'content-type': 'multipart/form-data'
+          'content-type': 'multipart/form-data',
+          'Authorization': `Bearer ${accessToken}`
         },
         body: formData
       });
       setUploadSuccessful(true);
-      fetchLanguageResult(res.name, function (err: string, data: LanguageResult) {
+      fetchLanguageResult(res.name, accessToken, function (err: string, data: LanguageResult) {
         if (err) { throw err; }
+        console.log(data);
         setTextResult(data.text);
         setGrammarResult(data.terminal);
       });
@@ -64,30 +69,35 @@ const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
   const [textResult, setTextResult] = React.useState<string>('');
   const [grammarResult, setGrammarResult] = React.useState<string>('');
 
+  const [accessToken, setAccessToken] = useAccessToken();
+
+  let { width, height } = useWindowDimensions();
+
   return (
-    <Surface style={{ minHeight: '100%' }}>
-      {!uploadSuccessful ?
-        <View style={{ minHeight: '100%', alignContent: 'center', justifyContent: 'space-evenly' }}>
+    <Surface style={{ height: '100%', width: '100%', alignItems: 'center' }}>
+      {!uploadSuccessful
+        ? <View style={{ height: '100%', width: width / height > 0.7 ? 360 : '100%', justifyContent: 'space-evenly' }}>
           {pickedFile.name ?
             <View style={{ alignItems: 'center' }}>
               <Text>Selected: {pickedFile.name}</Text>
               <Text>Size: {pickedFile.size ? pickedFile.size / 1000 : ''}kB</Text>
             </View> : null}
-          <View style={{ flexDirection: 'row', justifyContent: 'space-around', }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
             <Button mode='outlined' onPress={() => { pickFile(setPickedFile) }}>Select Resume</Button>
-            <Button mode='outlined' onPress={() => { onUpload(pickedFile) }}>Upload</Button>
+            <Button mode='outlined' onPress={() => { onUpload(pickedFile, accessToken) }}>Upload</Button>
           </View>
         </View>
-        :
-        <View style={{ justifyContent: 'space-between' }}>
-          <Surface style={{ minHeight: '50%', maxHeight: '75%', padding: '5%', margin: '5%', borderRadius: 25 }}>
-            <ScrollView>
-              {grammarResult ? <Text>{grammarResult}</Text> : <ActivityIndicator animating={true} />}
-            </ScrollView>
-          </Surface>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-            <Button mode='contained' onPress={() => navigation.navigate('Recommendation', { text: textResult })}>See Recommendation</Button>
-            <Button mode='contained' onPress={() => navigation.navigate('Recommendation', { text: textResult })}>Take Interview</Button>
+        : <View style={{ height: '85%', width: width / height > 0.7 ? '66%' : '100%', justifyContent: 'space-between' }}>
+          <View style={{ height: '100%' }}>
+            <Surface elevation={2} style={{ minHeight: '50%', maxHeight: '85%', padding: 25, margin: 25, borderRadius: 25 }}>
+              <ScrollView>
+                {grammarResult ? <Text>{grammarResult}</Text> : <ActivityIndicator animating={true} />}
+              </ScrollView>
+            </Surface>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+              <Button mode='contained' onPress={() => navigation.navigate('Recommendation', { text: textResult })}>See Recommendation</Button>
+              <Button mode='contained' onPress={() => navigation.navigate('Recommendation', { text: textResult })}>Take Interview</Button>
+            </View>
           </View>
         </View>}
     </Surface>

@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { fetchRecommenderResult, RecommenderResult } from '../DataFetcher';
 import { RootStackParamList } from '../App';
+import { useAccessToken } from '../AccessTokenProvider';
 
 type RecommendationScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -26,8 +27,10 @@ const RecommendationScreen: React.FC<Props> = ({ route, navigation }: Props) => 
   const { text } = route.params;
   const [keywords, setKeywords] = React.useState<string[]>(['']);
   const [recommendation, setRecommendation] = React.useState<string>('');
+  const [accessToken, setAccessToken] = useAccessToken();
+
   useFocusEffect(React.useCallback(() => {
-    fetchRecommenderResult(text, function (err: string, data: RecommenderResult) {
+    fetchRecommenderResult(text, accessToken, function (err: string, data: RecommenderResult) {
       if (err) { throw err; }
       setKeywords(data.keywords);
       setRecommendation(data.recommendation);

@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, useWindowDimensions } from 'react-native';
 import { ActivityIndicator, Button, Surface, Text } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useFilePicker } from 'use-file-picker';
 
-import { fetchLanguageResult, LanguageResult } from '../DataFetcher';
+import { uploadFile, fetchLanguageResult, LanguageResult } from '../DataFetcher';
 import { RootStackParamList } from '../App';
-import { API_URL } from '@env';
+import { useAccessToken } from '../AccessTokenProvider';
 
 type ResumeUploadScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -21,20 +21,17 @@ type Props = {
 const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
   const onUpload = async (res: File) => {
     try {
-      let formData = new FormData();
-      formData.append('resumeFile', res);
-      let xhr = new XMLHttpRequest();
-      xhr.open('POST', `${API_URL}/data`);
-      xhr.send(formData);
-      setUploadSuccessful(true);
-      fetchLanguageResult(res.name, function (err: string, data: LanguageResult) {
-        if (err) { throw err; }
-        setTextResult(data.text);
-        setGrammarResult(data.terminal);
+      uploadFile(res, accessToken, function () {
+        setUploadSuccessful(true);
+        fetchLanguageResult(res.name, accessToken, function (err: string, data: LanguageResult) {
+          if (err) { throw err; }
+          setTextResult(data.text);
+          setGrammarResult(data.terminal);
+        });
       });
     } catch (error) {
       console.error(error);
-    }
+    };
   };
   const [pickedFile, setPickedFile] = React.useState<File>();
   const { openFilePicker } = useFilePicker({
@@ -47,25 +44,27 @@ const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
   const [textResult, setTextResult] = React.useState<string>('');
   const [grammarResult, setGrammarResult] = React.useState<string>('');
 
+  let { width, height } = useWindowDimensions();
+
+  const [accessToken, setAccessToken] = useAccessToken();
+
   return (
-    <Surface style={{ minHeight: '100%' }}>
-      {!uploadSuccessful ?
-        <View style={{ minHeight: '100%', alignContent: 'center', justifyContent: 'space-evenly' }}>
+    <Surface style={{ height: '100%', width: '100%', alignItems: 'center' }}>
+      {!uploadSuccessful
+        ? <View style={{ borderWidth: 5, height: '100%', width: width / height > 0.7 ? 360 : '100%', justifyContent: 'space-evenly' }}>
           {pickedFile ?
             <View style={{ alignItems: 'center' }}>
               <Text>Selected: {pickedFile.name}</Text>
               <Text>Size: {pickedFile.size ? pickedFile.size / 1000 : ''}kB</Text>
             </View> : null}
-          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingHorizontal: '33%' }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
             <Button mode='outlined' onPress={() => { openFilePicker() }}>Select Resume</Button>
             <Button mode='outlined' onPress={() => { pickedFile ? onUpload(pickedFile) : null }}>Upload</Button>
           </View>
         </View>
-        :
-        // @ts-expect-error using vh works with webpack
-        <View style={{ height: '80vh', justifyContent: 'space-between' }}>
+        : <View style={{ height: '85%', width: width / height > 0.7 ? '66%' : '100%', justifyContent: 'space-between' }}>
           <View style={{ height: '100%' }}>
-            <Surface style={{ height: '85%', padding: '1%', margin: '1%', borderRadius: 25 }}>
+            <Surface elevation={2} style={{ minHeight: '50%', maxHeight: '85%', padding: 25, margin: 25, borderRadius: 25 }}>
               <ScrollView>
                 {grammarResult ? <Text>{grammarResult}</Text> : <ActivityIndicator animating={true} />}
               </ScrollView>

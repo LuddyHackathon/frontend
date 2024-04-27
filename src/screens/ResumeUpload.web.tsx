@@ -58,7 +58,7 @@ const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
             </View> : null}
           <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingHorizontal: '33%' }}>
             <Button mode='outlined' onPress={() => { openFilePicker() }}>Select Resume</Button>
-            <Button mode='outlined' onPress={() => { onUpload(pickedFile) }}>Upload</Button>
+            <Button mode='outlined' onPress={() => { pickedFile ? onUpload(pickedFile) : null }}>Upload</Button>
           </View>
         </View>
         :

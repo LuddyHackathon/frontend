@@ -8,6 +8,7 @@ import { NativeStackNavigationOptions, NativeStackNavigationProp } from '@react-
 import { RootStackParamList } from '../App'
 import { PreferencesContext } from '../PreferencesContext';
 import { LogoLight, LogoDark } from '../Logo';
+import { useAccessToken } from '../AccessTokenProvider';
 
 type HeaderScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -24,6 +25,7 @@ type Props = {
 const Header = ({ navigation, route, options, back }: Props) => {
   const title = getHeaderTitle(options, route.name);
   const { toggleTheme, isThemeDark } = React.useContext(PreferencesContext);
+  const [accessToken, setAccessToken] = useAccessToken();
 
   return (
     <Appbar.Header>
@@ -39,6 +41,13 @@ const Header = ({ navigation, route, options, back }: Props) => {
         icon={isThemeDark ? 'brightness-4' : 'brightness-5'}
         onPress={toggleTheme}
       />
+      {accessToken
+        ? <IconButton
+          icon='logout'
+          onPress={() => { setAccessToken(''); navigation.navigate('CareerSpeak'); }}
+        />
+        : null}
+
     </Appbar.Header >
   );
 };

@@ -94,11 +94,13 @@ const AuthenticationScreen: React.FC<Props> = ({ navigation }: Props) => {
           </View>
           <View style={{ display: 'flex', flexDirection: 'row', flex: 1, flexWrap: 'wrap' }}>
             <Text>{changeAction[+isSignUp]} </Text>
-            <Pressable>
-              <Text theme={{ colors: { onSurface: isThemeDark ? '#6CB1FF' : '#1A0DAB' } }} onPress={() => setShowSignUp(!isSignUp)} >
-                Sign {signAction[+!isSignUp]}!
-              </Text>
-            </Pressable>
+            <View>
+              <Pressable>
+                <Text theme={{ colors: { onSurface: isThemeDark ? '#6CB1FF' : '#1A0DAB' } }} onPress={() => setShowSignUp(!isSignUp)} >
+                  Sign {signAction[+!isSignUp]}!
+                </Text>
+              </Pressable>
+            </View>
           </View>
         </Surface>
       </View>

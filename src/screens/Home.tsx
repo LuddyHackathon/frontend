@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, Linking, View } from 'react-native';
+import { Linking, View, useWindowDimensions } from 'react-native';
 import { Text, Button, Surface } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
@@ -18,10 +18,11 @@ const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     navigation.navigate('Authentication');
   };
 
-  let isLandscape = Dimensions.get('window').height < Dimensions.get('window').width;
+  let { width, height } = useWindowDimensions();
 
   return (
-    <Surface style={{ minHeight: '100%', justifyContent: 'space-evenly', paddingHorizontal: isLandscape ? '33%' : 'auto' }}>
+    <Surface style={{ height: '100%', flexDirection: 'row',justifyContent: 'center'}}>
+      <View style={{ height: '100%', width: width / height > 0.7 ? 350 : '100%', justifyContent:'space-evenly'}}>
       <View style={{ flexDirection: 'column', alignItems: 'center' }}>
         <Text variant='titleLarge'>Welcome to</Text>
         <Text variant='displayLarge'>CareerSpeak</Text>
@@ -34,6 +35,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
         <Button mode="contained" icon={'rocket-launch'} onPress={handleGetStarted}>
           Get Started
         </Button>
+        </View>
       </View>
     </Surface>
   );

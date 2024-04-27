@@ -15,7 +15,7 @@ type Props = {
 
 const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   const handleGetStarted = () => {
-    navigation.navigate('ResumeUpload');
+    navigation.navigate('Authentication');
   };
 
   let isLandscape = Dimensions.get('window').height < Dimensions.get('window').width;

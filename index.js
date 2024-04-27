@@ -11,6 +11,7 @@ import App from './src/App';
 import iconFont from 'react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf';
 
 import { PreferencesContext } from './src/PreferencesContext';
+import { AccessTokenProvider } from './src/AccessTokenProvider';
 
 const { LightTheme, DarkTheme } = adaptNavigationTheme({
   reactNavigationLight: NavigationDefaultTheme,
@@ -40,16 +41,18 @@ function Main() {
 
   return (
     <PreferencesContext.Provider value={preferences}>
-      <PaperProvider theme={theme}>
-        <StatusBar
-          backgroundColor={theme.colors.background}
-          barStyle={statusBarStyle}
-          hidden={false}
-        />
-        <NavigationContainer theme={theme}>
-          <App theme />
-        </NavigationContainer>
-      </PaperProvider>
+      <AccessTokenProvider>
+        <PaperProvider theme={theme}>
+          <StatusBar
+            backgroundColor={theme.colors.background}
+            barStyle={statusBarStyle}
+            hidden={false}
+          />
+          <NavigationContainer theme={theme}>
+            <App theme />
+          </NavigationContainer>
+        </PaperProvider>
+      </AccessTokenProvider>
     </PreferencesContext.Provider>
   );
 }

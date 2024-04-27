@@ -22,7 +22,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 
   return (
     <Surface style={{ height: '100%', flexDirection: 'row',justifyContent: 'center'}}>
-      <View style={{ height: '100%', width: width / height > 0.7 ? 350 : '100%', justifyContent:'space-evenly'}}>
+      <View style={{ height: '100%', width: width / height > 0.7 ? 360 : '100%', justifyContent:'space-evenly'}}>
       <View style={{ flexDirection: 'column', alignItems: 'center' }}>
         <Text variant='titleLarge'>Welcome to</Text>
         <Text variant='displayLarge'>CareerSpeak</Text>

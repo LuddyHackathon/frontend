@@ -6,7 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
 import { PreferencesContext } from '../PreferencesContext';
 import { LogoLight, LogoDark } from '../Logo';
-import { fetchAuthenticationResult } from '../DataFetcher';
+import { fetchAuthenticationResult, AuthenticationResult } from '../DataFetcher';
 import { useAccessToken } from '../AccessTokenProvider';
 
 type AuthenticationScreenNavigationProp = NativeStackNavigationProp<
@@ -20,11 +20,9 @@ type Props = {
 
 const onSubmit = (email: string, password: string, isSignUp: boolean, done: CallableFunction) => {
   let endpoint = isSignUp ? 'signup' : 'login';
-  fetchAuthenticationResult(email, password, endpoint, function (err: string, data: Object) {
+  fetchAuthenticationResult(email, password, endpoint, function (err: string, data: AuthenticationResult) {
     if (err) { throw err; }
-    // @ts-expect-error
     const token = data.token;
-    console.log(token);
     done(token);
   });
 }

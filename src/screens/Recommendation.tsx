@@ -1,10 +1,10 @@
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 import { Button, Surface, Text } from 'react-native-paper';
-import { Route, RouteProp, useFocusEffect } from '@react-navigation/native';
+import { RouteProp, useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { fetchRecommenderResult } from '../DataFetcher';
+import { fetchRecommenderResult, RecommenderResult } from '../DataFetcher';
 import { RootStackParamList } from '../App';
 
 type RecommendationScreenNavigationProp = NativeStackNavigationProp<
@@ -27,11 +27,9 @@ const RecommendationScreen: React.FC<Props> = ({ route, navigation }: Props) => 
   const [keywords, setKeywords] = React.useState<string[]>(['']);
   const [recommendation, setRecommendation] = React.useState<string>('');
   useFocusEffect(React.useCallback(() => {
-    fetchRecommenderResult(text, function (err: string, data: Object) {
+    fetchRecommenderResult(text, function (err: string, data: RecommenderResult) {
       if (err) { throw err; }
-      // @ts-expect-error
       setKeywords(data.keywords);
-      // @ts-expect-error
       setRecommendation(data.recommendation);
     });
   }, [text]));

@@ -5,7 +5,7 @@ import { ActivityIndicator, Button, Surface, Text } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useFilePicker } from 'use-file-picker';
 
-import { fetchLanguageResult } from '../DataFetcher';
+import { fetchLanguageResult, LanguageResult } from '../DataFetcher';
 import { RootStackParamList } from '../App';
 import { API_URL } from '@env';
 
@@ -27,19 +27,16 @@ const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
       xhr.open('POST', `${API_URL}/data`);
       xhr.send(formData);
       setUploadSuccessful(true);
-      fetchLanguageResult(res.name, function (err: string, data: Object) {
+      fetchLanguageResult(res.name, function (err: string, data: LanguageResult) {
         if (err) { throw err; }
-        // @ts-expect-error
         setTextResult(data.text);
-        // @ts-expect-error
         setGrammarResult(data.terminal);
       });
     } catch (error) {
       console.error(error);
     }
   };
-  // @ts-expect-error Creating blank file requires valid slice type
-  const [pickedFile, setPickedFile] = React.useState<File>({ lastModified: 0, size: 0, type: '', slice: {} });
+  const [pickedFile, setPickedFile] = React.useState<File>();
   const { openFilePicker } = useFilePicker({
     readAs: 'ArrayBuffer',
     accept: '.pdf',
@@ -54,7 +51,7 @@ const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
     <Surface style={{ minHeight: '100%' }}>
       {!uploadSuccessful ?
         <View style={{ minHeight: '100%', alignContent: 'center', justifyContent: 'space-evenly' }}>
-          {pickedFile.name ?
+          {pickedFile ?
             <View style={{ alignItems: 'center' }}>
               <Text>Selected: {pickedFile.name}</Text>
               <Text>Size: {pickedFile.size ? pickedFile.size / 1000 : ''}kB</Text>

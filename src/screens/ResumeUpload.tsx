@@ -5,7 +5,7 @@ import { ActivityIndicator, Button, Surface, Text } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import DocumentPicker, { DocumentPickerResponse, isCancel } from 'react-native-document-picker';
 
-import { fetchLanguageResult } from '../DataFetcher';
+import { fetchLanguageResult, LanguageResult } from '../DataFetcher';
 import { RootStackParamList } from '../App';
 import { API_URL } from '@env';
 
@@ -49,11 +49,9 @@ const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
         body: formData
       });
       setUploadSuccessful(true);
-      fetchLanguageResult(res.name, function (err: string, data: Object) {
+      fetchLanguageResult(res.name, function (err: string, data: LanguageResult) {
         if (err) { throw err; }
-        // @ts-expect-error
         setTextResult(data.text);
-        // @ts-expect-error
         setGrammarResult(data.terminal);
       });
     } catch (error) {

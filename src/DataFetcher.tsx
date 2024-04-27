@@ -1,5 +1,11 @@
 import { API_URL } from '@env';
 
+export type LanguageResult = {
+  text: string,
+  terminal: string,
+  grammar: string
+};
+
 export function fetchLanguageResult(fileName: string | null, done: CallableFunction) {
   let xhr = new XMLHttpRequest();
   xhr.open('POST', `${API_URL}/grammar?file=${fileName}`);
@@ -10,6 +16,11 @@ export function fetchLanguageResult(fileName: string | null, done: CallableFunct
     done(JSON.parse(xhr.response));
   };
   xhr.send();
+};
+
+export type RecommenderResult = {
+  keywords: Array<string>,
+  recommendation: string
 };
 
 export function fetchRecommenderResult(text: string, done: CallableFunction) {
@@ -24,7 +35,12 @@ export function fetchRecommenderResult(text: string, done: CallableFunction) {
     done(JSON.parse(xhr.response));
   };
   xhr.send(formData);
-}
+};
+
+export type AuthenticationResult = {
+  message: string,
+  token: string
+};
 
 export function fetchAuthenticationResult(email: string, password: string, endpoint: string, done: CallableFunction) {
   let xhr = new XMLHttpRequest();
@@ -39,4 +55,4 @@ export function fetchAuthenticationResult(email: string, password: string, endpo
     done(JSON.parse(xhr.response));
   };
   xhr.send(formData);
-}
+};

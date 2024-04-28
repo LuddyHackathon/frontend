@@ -52,7 +52,7 @@ const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
   return (
     <Surface style={{ height: '100%', width: '100%', alignItems: 'center' }}>
       {!uploadSuccessful
-        ? <View style={{ borderWidth: 5, height: '100%', width: width / height > 0.7 ? 360 : '100%', justifyContent: 'space-evenly' }}>
+        ? <View style={{ height: '100%', width: width / height > 0.7 ? 360 : '100%', justifyContent: 'space-evenly' }}>
           {pickedFile ?
             <View style={{ alignItems: 'center' }}>
               <Text>Selected: {pickedFile.name}</Text>

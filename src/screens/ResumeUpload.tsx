@@ -11,18 +11,20 @@ import { API_URL } from '@env';
 import { useAccessToken } from '../AccessTokenProvider';
 
 const pickFile = async (setMethod: CallableFunction) => {
-  const pickerResult = await DocumentPicker.pickSingle({
-    type: [DocumentPicker.types.pdf],
-    copyTo: 'cachesDirectory'
-  }).catch((error) => {
+  try {
+    const pickerResult = await DocumentPicker.pickSingle({
+      type: [DocumentPicker.types.pdf],
+      copyTo: 'cachesDirectory'
+    });
+    setMethod(pickerResult)
+  } catch (error) {
     if (isCancel(error)) {
       console.log('Cancelled')
     } else {
       console.error(error)
-    }
-  })
-  setMethod(pickerResult)
-}
+    };
+  };
+};
 
 type ResumeUploadScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -34,34 +36,19 @@ type Props = {
 };
 
 const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
-  const onUpload = async (res: DocumentPickerResponse, accessToken: string) => {
+  const onUpload = async (res: DocumentPickerResponse) => {
     try {
-      uploadFile(res, accessToken, () => { })
-
-      let formData = new FormData();
-      formData.append('resumeFile', {
-        uri: res.uri,
-        type: res.type,
-        name: res.name
-      });
-      await fetch(`${API_URL}/data`, {
-        method: 'POST',
-        headers: {
-          'content-type': 'multipart/form-data',
-          'Authorization': `Bearer ${accessToken}`
-        },
-        body: formData
-      });
-      setUploadSuccessful(true);
-      fetchLanguageResult(res.name, accessToken, function (err: string, data: LanguageResult) {
-        if (err) { throw err; }
-        console.log(data);
-        setTextResult(data.text);
-        setGrammarResult(data.terminal);
+      uploadFile(res, accessToken, function () {
+        setUploadSuccessful(true);
+        fetchLanguageResult(res.name, accessToken, function (err: string, data: LanguageResult) {
+          if (err) { throw err; }
+          setTextResult(data.text);
+          setGrammarResult(data.terminal);
+        });
       });
     } catch (error) {
       console.error(error);
-    }
+    };
   };
 
   const [pickedFile, setPickedFile] = React.useState<DocumentPickerResponse>({ name: null, uri: '', fileCopyUri: null, type: null, size: null });
@@ -69,9 +56,9 @@ const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
   const [textResult, setTextResult] = React.useState<string>('');
   const [grammarResult, setGrammarResult] = React.useState<string>('');
 
-  const [accessToken, setAccessToken] = useAccessToken();
-
   let { width, height } = useWindowDimensions();
+
+  const [accessToken, setAccessToken] = useAccessToken();
 
   return (
     <Surface style={{ height: '100%', width: '100%', alignItems: 'center' }}>
@@ -84,7 +71,7 @@ const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
             </View> : null}
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
             <Button mode='outlined' onPress={() => { pickFile(setPickedFile) }}>Select Resume</Button>
-            <Button mode='outlined' onPress={() => { onUpload(pickedFile, accessToken) }}>Upload</Button>
+            <Button mode='outlined' onPress={() => { onUpload(pickedFile) }}>Upload</Button>
           </View>
         </View>
         : <View style={{ height: '85%', width: width / height > 0.7 ? '66%' : '100%', justifyContent: 'space-between' }}>

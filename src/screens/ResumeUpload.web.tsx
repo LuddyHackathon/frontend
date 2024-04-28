@@ -33,6 +33,7 @@ const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
       console.error(error);
     };
   };
+
   const [pickedFile, setPickedFile] = React.useState<File>();
   const { openFilePicker } = useFilePicker({
     readAs: 'ArrayBuffer',

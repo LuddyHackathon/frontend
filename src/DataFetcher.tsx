@@ -73,3 +73,21 @@ export function uploadFile(file: any, token: string, done: CallableFunction) {
   };
   xhr.send(formData);
 };
+
+export type QuestionsResult = {
+  technical_questions: Array<string>,
+  hr_questions: Array<string>
+}
+
+export function fetchQuestions(endpoint: string, params: string, token: string, done: CallableFunction) {
+  let xhr = new XMLHttpRequest();
+  xhr.open('POST', `${API_URL}/${endpoint}${params ? '/?' + params : ''}`);
+  xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+  xhr.onload = function () {
+    done(null, JSON.parse(xhr.response));
+  };
+  xhr.onerror = function () {
+    done(JSON.parse(xhr.response));
+  };
+  xhr.send();
+};

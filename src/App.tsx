@@ -2,10 +2,11 @@ import React from 'react';
 import { NativeStackNavigationOptions, createNativeStackNavigator } from '@react-navigation/native-stack';
 import Header from './screens/Header';
 import HomeScreen from './screens/Home';
+import AuthenticationScreen from './screens/Authentication';
 import ResumeUploadScreen from './screens/ResumeUpload';
 import RecommendationScreen from './screens/Recommendation';
 import InterviewerHomeScreen from './screens/InterviewerHome';
-import AuthenticationScreen from './screens/Authentication';
+import TechnicalInterviewerScreen from './screens/TechnicalInterviewer';
 
 export type RootStackParamList = {
   CareerSpeak: undefined;
@@ -14,6 +15,7 @@ export type RootStackParamList = {
   ResumeUpload: undefined;
   Recommendation: { text: string };
   InterviewerHome: undefined;
+  TechnicalInterviewer: { keywords: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -21,7 +23,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function App() {
   return (
     <Stack.Navigator
-      initialRouteName='CareerSpeak'
+      initialRouteName='TechnicalInterviewer'
       screenOptions={{
         header: (props) => {
           const options: NativeStackNavigationOptions = {};
@@ -33,10 +35,11 @@ export default function App() {
         }
       }}>
       <Stack.Screen name='CareerSpeak' component={HomeScreen} />
+      <Stack.Screen name='Authentication' component={AuthenticationScreen} />
       <Stack.Screen name='ResumeUpload' component={ResumeUploadScreen} />
       <Stack.Screen name='Recommendation' component={RecommendationScreen} initialParams={{ text: '42' }} />
       <Stack.Screen name='InterviewerHome' component={InterviewerHomeScreen} />
-      <Stack.Screen name='Authentication' component={AuthenticationScreen} />
+      <Stack.Screen name='TechnicalInterviewer' component={TechnicalInterviewerScreen} initialParams={{ keywords: 'python' }} />
     </Stack.Navigator>
   );
 }

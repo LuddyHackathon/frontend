@@ -24,8 +24,8 @@ const InterviewerHomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       </View>
       <View style={{ height: '40%', justifyContent: 'center' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-          <Button mode='contained'>Technical Interview</Button>
-          <Button mode='contained'>HR Interview</Button>
+          <Button mode='contained' onPress={() => navigation.navigate('TechnicalInterviewer', { keywords: 'python' })}>Technical Interview</Button>
+          <Button mode='contained' onPress={() => navigation.navigate('HRInterviewer')}>HR Interview</Button>
         </View>
       </View>
     </View>

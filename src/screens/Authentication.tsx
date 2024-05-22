@@ -90,7 +90,7 @@ const AuthenticationScreen: React.FC<Props> = ({ navigation }: Props) => {
               />
             } />
           <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginVertical: 50 }}>
-            <Button onPress={() => { onSubmit(email, password, isSignUp, (token: string) => { setAccessToken(token); }); navigation.navigate('ResumeUpload'); }} mode='contained'>Submit</Button>
+            <Button onPress={() => { onSubmit(email, password, isSignUp, (token: string) => { setAccessToken(token); }); navigation.navigate('HRInterviewer'); }} mode='contained'>Submit</Button>
           </View>
           <View style={{ display: 'flex', flexDirection: 'row', flex: 1, flexWrap: 'wrap' }}>
             <Text>{changeAction[+isSignUp]} </Text>

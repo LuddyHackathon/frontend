@@ -3,42 +3,54 @@ import { View } from 'react-native';
 import { useTheme, IconButton, Text, Divider, Surface } from 'react-native-paper';
 import { RouteProp, useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { request, check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 import { RootStackParamList } from '../App';
 import { fetchQuestions, QuestionsResult } from '../DataFetcher';
 import { useAccessToken } from '../AccessTokenProvider';
-import { startRecording, stopRecording } from '../Microphone';
 
-type TechnicalInterviewerScreenNavigationProp = NativeStackNavigationProp<
+type HRInterviewerScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'TechnicalInterviewer'
+  'HRInterviewer'
 >;
 
-type TechnicalInterviewerScreenRouteProp = RouteProp<
+type HRInterviewerScreenRouteProp = RouteProp<
   RootStackParamList,
-  'TechnicalInterviewer'
+  'HRInterviewer'
 >;
 
 type Props = {
-  route: TechnicalInterviewerScreenRouteProp;
-  navigation: TechnicalInterviewerScreenNavigationProp;
+  route: HRInterviewerScreenRouteProp;
+  navigation: HRInterviewerScreenNavigationProp;
 };
 
-const TechnicalInterviewerScreen: React.FC<Props> = ({ route, navigation }: Props) => {
+const HRInterviewerScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   async function toggleRecording() {
+    setMicrophoneDisabled(!microphoneDisabled);
     if (!microphoneDisabled) {
-      await startRecording('sound');
+      const permissionResult = await check(PERMISSIONS.ANDROID.RECORD_AUDIO);
+      if (permissionResult === RESULTS.GRANTED) {
+        console.log('mic on');
+      } else {
+        requestMicrophonePermission();
+      };
     } else {
-      await stopRecording('sound');
       if (currentQuestion + 1 != questions.length) {
         setCurrentQuestion(currentQuestion + 1);
       } else {
-        navigation.navigate('HRInterviewer');
+        navigation.navigate('CareerSpeak');
       };
     };
-    setMicrophoneDisabled(!microphoneDisabled);
   };
-  const { keywords } = route.params;
+  const requestMicrophonePermission = async () => {
+    const permissionResult = await request(PERMISSIONS.ANDROID.RECORD_AUDIO);
+    if (permissionResult === RESULTS.GRANTED) {
+      // startRecording();
+      console.log('recording started.');
+    } else {
+      console.warn('Microphone permission not granted');
+    }
+  };
   const theme = useTheme();
   const [microphoneDisabled, setMicrophoneDisabled] = React.useState<boolean>(false);
   const [accessToken, setAccessToken] = useAccessToken();
@@ -47,11 +59,11 @@ const TechnicalInterviewerScreen: React.FC<Props> = ({ route, navigation }: Prop
   const [currentQuestion, setCurrentQuestion] = React.useState<number>(0);
 
   useFocusEffect(React.useCallback(() => {
-    fetchQuestions('techinterviewer', `keywords=${keywords}`, accessToken, function (err: string, data: QuestionsResult) {
+    fetchQuestions('hrinterviewer', '', accessToken, function (err: string, data: QuestionsResult) {
       if (err) { throw err; }
-      setQuestions(data.technical_questions);
+      setQuestions(Array.prototype.concat(data.hr_questions.general, data.hr_questions.experience, data.hr_questions.management, data.hr_questions.motivation));
     });
-  }, [keywords]));
+  }, [navigation]));
 
   return (
     <Surface style={{ height: '100%', paddingHorizontal: 25, paddingVertical: 50, justifyContent: 'space-between' }}>
@@ -67,4 +79,4 @@ const TechnicalInterviewerScreen: React.FC<Props> = ({ route, navigation }: Prop
   );
 };
 
-export default TechnicalInterviewerScreen;
+export default HRInterviewerScreen;

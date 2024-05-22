@@ -21,7 +21,7 @@ type Props = {
 const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
   const onUpload = async (res: File) => {
     try {
-      uploadFile(res, accessToken, function () {
+      uploadFile(res, 'data', 'resumeFile', accessToken, function () {
         setUploadSuccessful(true);
         fetchLanguageResult(res.name, accessToken, function (err: string, data: LanguageResult) {
           if (err) { throw err; }

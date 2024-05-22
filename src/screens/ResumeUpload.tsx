@@ -7,7 +7,6 @@ import DocumentPicker, { DocumentPickerResponse, isCancel } from 'react-native-d
 
 import { uploadFile, fetchLanguageResult, LanguageResult } from '../DataFetcher';
 import { RootStackParamList } from '../App';
-import { API_URL } from '@env';
 import { useAccessToken } from '../AccessTokenProvider';
 
 const pickFile = async (setMethod: CallableFunction) => {
@@ -38,7 +37,7 @@ type Props = {
 const ResumeUploadScreen: React.FC<Props> = ({ navigation }: Props) => {
   const onUpload = async (res: DocumentPickerResponse) => {
     try {
-      uploadFile(res, accessToken, function () {
+      uploadFile(res, 'data', 'resumeFile', accessToken, function () {
         setUploadSuccessful(true);
         fetchLanguageResult(res.name, accessToken, function (err: string, data: LanguageResult) {
           if (err) { throw err; }

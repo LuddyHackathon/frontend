@@ -7,6 +7,7 @@ import ResumeUploadScreen from './screens/ResumeUpload';
 import RecommendationScreen from './screens/Recommendation';
 import InterviewerHomeScreen from './screens/InterviewerHome';
 import TechnicalInterviewerScreen from './screens/TechnicalInterviewer';
+import HRInterviewerScreen from './screens/HRInterviewer';
 
 export type RootStackParamList = {
   CareerSpeak: undefined;
@@ -16,6 +17,7 @@ export type RootStackParamList = {
   Recommendation: { text: string };
   InterviewerHome: undefined;
   TechnicalInterviewer: { keywords: string };
+  HRInterviewer: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -23,7 +25,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function App() {
   return (
     <Stack.Navigator
-      initialRouteName='TechnicalInterviewer'
+      initialRouteName='CareerSpeak'
       screenOptions={{
         header: (props) => {
           const options: NativeStackNavigationOptions = {};
@@ -40,6 +42,7 @@ export default function App() {
       <Stack.Screen name='Recommendation' component={RecommendationScreen} initialParams={{ text: '42' }} />
       <Stack.Screen name='InterviewerHome' component={InterviewerHomeScreen} />
       <Stack.Screen name='TechnicalInterviewer' component={TechnicalInterviewerScreen} initialParams={{ keywords: 'python' }} />
+      <Stack.Screen name='HRInterviewer' component={HRInterviewerScreen} />
     </Stack.Navigator>
   );
 }

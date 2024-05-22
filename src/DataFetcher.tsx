@@ -14,6 +14,7 @@ export function fetchLanguageResult(fileName: string | null, token: string, done
     done(null, JSON.parse(xhr.response));
   };
   xhr.onerror = function () {
+    console.log('error: ' + xhr.response);
     done(JSON.parse(xhr.response));
   };
   xhr.send();
@@ -34,6 +35,7 @@ export function fetchRecommenderResult(text: string, token: string, done: Callab
     done(null, JSON.parse(xhr.response));
   };
   xhr.onerror = function () {
+    console.log('error: ' + xhr.response);
     done(JSON.parse(xhr.response));
   };
   xhr.send(formData);
@@ -54,29 +56,36 @@ export function fetchAuthenticationResult(email: string, password: string, endpo
     done(null, JSON.parse(xhr.response));
   };
   xhr.onerror = function () {
+    console.log('error: ' + xhr.response);
     done(JSON.parse(xhr.response));
   };
   xhr.send(formData);
 };
 
-export function uploadFile(file: any, token: string, done: CallableFunction) {
+export function uploadFile(file: any, endpoint: string, formName: string, token: string, done: CallableFunction) {
   let formData = new FormData();
-  formData.append('resumeFile', file);
+  formData.append(formName, file);
   let xhr = new XMLHttpRequest();
-  xhr.open('POST', `${API_URL}/data`);
+  xhr.open('POST', `${API_URL}/${endpoint}`);
   xhr.setRequestHeader('Authorization', `Bearer ${token}`);
   xhr.onload = function () {
-    done(null);
+    done(null, JSON.parse(xhr.response));
   };
   xhr.onerror = function () {
-    done(JSON.parse(xhr.response));
+    console.log('error: ' + xhr.response + xhr.status);
+    done(xhr.response);
   };
   xhr.send(formData);
 };
 
 export type QuestionsResult = {
   technical_questions: Array<string>,
-  hr_questions: Array<string>
+  hr_questions: {
+    general: string,
+    experience: string,
+    management: string,
+    motivation: string
+  }
 }
 
 export function fetchQuestions(endpoint: string, params: string, token: string, done: CallableFunction) {
@@ -87,6 +96,7 @@ export function fetchQuestions(endpoint: string, params: string, token: string, 
     done(null, JSON.parse(xhr.response));
   };
   xhr.onerror = function () {
+    console.log('error: ' + xhr.response);
     done(JSON.parse(xhr.response));
   };
   xhr.send();

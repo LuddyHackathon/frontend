@@ -4,14 +4,22 @@ import { uploadFile } from './DataFetcher';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
 
-export async function startRecording(filename: string) {
-  await audioRecorderPlayer.startRecorder(`${RNFS.CachesDirectoryPath}/${filename}.mp4`);
+export async function startRecording() {
+  await audioRecorderPlayer.startRecorder();
 };
 
-export async function stopRecording(filename: string) {
-  const result = await audioRecorderPlayer.stopRecorder();
+export async function stopRecording(token: string) {
+  const result = (await audioRecorderPlayer.stopRecorder()).replace('//', '/');
   audioRecorderPlayer.removeRecordBackListener();
+  console.log(result);
 
-  uploadFile(RNFS.readFile(result), 'transcriber', 'voiceFile', '', console.log);
-  // RNFS.unlink(result);
+  let voiceFile = {
+    uri: result,
+    type: 'audio/mp4',
+    name: result,
+  };
+
+  uploadFile(voiceFile, 'transcriber', 'voiceFile', token, console.log);
+
+  RNFS.unlink(result);
 };

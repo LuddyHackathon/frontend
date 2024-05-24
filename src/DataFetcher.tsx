@@ -56,7 +56,7 @@ export function fetchAuthenticationResult(email: string, password: string, endpo
     done(null, JSON.parse(xhr.response));
   };
   xhr.onerror = function () {
-    console.log('error: ' + xhr.response);
+    console.error(xhr.response, xhr.status);
     done(JSON.parse(xhr.response));
   };
   xhr.send(formData);
@@ -69,10 +69,11 @@ export function uploadFile(file: any, endpoint: string, formName: string, token:
   xhr.open('POST', `${API_URL}/${endpoint}`);
   xhr.setRequestHeader('Authorization', `Bearer ${token}`);
   xhr.onload = function () {
-    done(null, JSON.parse(xhr.response));
+    console.log(xhr.status);
+    done(null, xhr.status);
   };
   xhr.onerror = function () {
-    console.log('error: ' + xhr.response + xhr.status);
+    console.error(xhr.response + xhr.status);
     done(xhr.response);
   };
   xhr.send(formData);

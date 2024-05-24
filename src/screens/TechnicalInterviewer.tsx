@@ -27,9 +27,9 @@ type Props = {
 const TechnicalInterviewerScreen: React.FC<Props> = ({ route, navigation }: Props) => {
   async function toggleRecording() {
     if (!microphoneDisabled) {
-      await startRecording('sound');
+      await startRecording();
     } else {
-      await stopRecording('sound');
+      await stopRecording(accessToken);
       if (currentQuestion + 1 != questions.length) {
         setCurrentQuestion(currentQuestion + 1);
       } else {

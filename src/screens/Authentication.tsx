@@ -82,7 +82,7 @@ const AuthenticationScreen: React.FC<Props> = ({ navigation }: Props) => {
             blurOnSubmit={false}
             onChangeText={password => setPassword(password)}
             secureTextEntry={hidePass}
-            onSubmitEditing={() => { onSubmit(email, password, isSignUp, (token: string) => { setAccessToken(token); }); navigation.navigate('ResumeUpload'); }}
+            onSubmitEditing={() => { onSubmit(email, password, isSignUp, (token: string) => { setAccessToken(token); }); navigation.navigate('InterviewerHome'); }}
             right={
               <TextInput.Icon
                 icon='eye'
@@ -90,7 +90,7 @@ const AuthenticationScreen: React.FC<Props> = ({ navigation }: Props) => {
               />
             } />
           <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginVertical: 50 }}>
-            <Button onPress={() => { onSubmit(email, password, isSignUp, (token: string) => { setAccessToken(token); }); navigation.navigate('ResumeUpload'); }} mode='contained'>Submit</Button>
+            <Button onPress={() => { onSubmit(email, password, isSignUp, (token: string) => { setAccessToken(token); }); navigation.navigate('InterviewerHome'); }} mode='contained'>Submit</Button>
           </View>
           <View style={{ display: 'flex', flexDirection: 'row', flex: 1, flexWrap: 'wrap' }}>
             <Text>{changeAction[+isSignUp]} </Text>

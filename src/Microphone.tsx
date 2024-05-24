@@ -4,8 +4,9 @@ import { uploadFile } from './DataFetcher';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
 
-export async function startRecording() {
-  await audioRecorderPlayer.startRecorder();
+export async function startRecording(fileName: string) {
+ let result = await audioRecorderPlayer.startRecorder(RNFS.CachesDirectoryPath + '/' + fileName + '.mp4');
+  console.log(fileName)
 };
 
 export async function stopRecording(token: string) {

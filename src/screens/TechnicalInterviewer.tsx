@@ -46,13 +46,12 @@ const TechnicalInterviewerScreen: React.FC<Props> = ({ route, navigation }: Prop
             paraphrased: output.paraphrased
           }
         );
-
-      }))
+      }));
 
       if (currentQuestion + 1 != questions.length) {
         setCurrentQuestion(currentQuestion + 1);
       } else {
-        navigation.navigate('InterviewerResults', { questions });
+        navigation.navigate('InterviewerResults', { questions: questionDetails, showHR: true });
       };
     };
     setMicrophoneDisabled(!microphoneDisabled);

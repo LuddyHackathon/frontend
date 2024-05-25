@@ -8,6 +8,7 @@ import RecommendationScreen from './screens/Recommendation';
 import InterviewerHomeScreen from './screens/InterviewerHome';
 import TechnicalInterviewerScreen from './screens/TechnicalInterviewer';
 import HRInterviewerScreen from './screens/HRInterviewer';
+import InterviewerResultsScreen from './screens/InterviewerResults';
 
 export type RootStackParamList = {
   CareerSpeak: undefined;
@@ -19,8 +20,12 @@ export type RootStackParamList = {
   TechnicalInterviewer: { keywords: string };
   HRInterviewer: undefined;
   InterviewerResults: {
-    questions: Array<string>,
-    
+    questions: Array<{
+      question: string;
+      transcribed: string;
+      paraphrased: string;
+    }>;
+    showHR: boolean;
   };
 };
 
@@ -47,6 +52,7 @@ export default function App() {
       <Stack.Screen name='InterviewerHome' component={InterviewerHomeScreen} />
       <Stack.Screen name='TechnicalInterviewer' component={TechnicalInterviewerScreen} initialParams={{ keywords: 'python' }} />
       <Stack.Screen name='HRInterviewer' component={HRInterviewerScreen} />
+      <Stack.Screen name='InterviewerResults' component={InterviewerResultsScreen} initialParams={{ questions: [{ question: '', transcribed: '', paraphrased: '' }], showHR: true }} />
     </Stack.Navigator>
   );
 }

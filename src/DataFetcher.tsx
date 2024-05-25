@@ -76,7 +76,7 @@ export async function uploadFile(file: any, endpoint: string, formName: string, 
   xhr.setRequestHeader('Authorization', `Bearer ${token}`);
   xhr.onload = function () {
     done(null, xhr.response);
-    return xhr.response;
+    
   };
   xhr.onerror = function () {
     console.error(xhr.response + xhr.status);

@@ -25,6 +25,5 @@ export async function stopRecording(token: string, done: CallableFunction) {
     if (err) { throw err; }
     output = data;
     done(data);
-    console.log('fetched', data)
   });
 };

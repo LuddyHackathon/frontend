@@ -36,7 +36,18 @@ const TechnicalInterviewerScreen: React.FC<Props> = ({ route, navigation }: Prop
       await startRecording(`t${currentQuestion}`);
     } else {
 
-      await stopRecording(accessToken, setTranscriberOutput);
+      await stopRecording(accessToken, ((result: string) => {
+        let output: TranscriberResult = JSON.parse(result)
+        let forQuestion = parseInt(output.file.charAt(1));
+        questionDetails.push(
+          {
+            question: questions[forQuestion],
+            transcribed: output.transcribed,
+            paraphrased: output.paraphrased
+          }
+        );
+
+      }))
 
       if (currentQuestion + 1 != questions.length) {
         setCurrentQuestion(currentQuestion + 1);
@@ -50,7 +61,6 @@ const TechnicalInterviewerScreen: React.FC<Props> = ({ route, navigation }: Prop
   const { keywords } = route.params;
   const theme = useTheme();
   const [microphoneDisabled, setMicrophoneDisabled] = React.useState<boolean>(false);
-  const [transcriberOutput, setTranscriberOutput] = React.useState<TranscriberResult>({ file: '', transcribed: '', paraphrased: '' });
   const [questionDetails, setQuestionDetails] = React.useState<Array<QuestionDetails>>([]);
   const [accessToken, setAccessToken] = useAccessToken();
 
@@ -64,23 +74,6 @@ const TechnicalInterviewerScreen: React.FC<Props> = ({ route, navigation }: Prop
     });
   }, [keywords]));
 
-  React.useCallback(() => {
-    console.log('ssdv')
-    if (transcriberOutput.file) {
-      let forQuestion = parseInt(transcriberOutput.file[1]);
-      questionDetails.push(
-        {
-          question: questions[forQuestion],
-          transcribed: transcriberOutput.transcribed,
-          paraphrased: transcriberOutput.paraphrased
-        }
-      );
-
-      console.log('questionDetails:', questionDetails);
-
-      setTranscriberOutput({ file: '', transcribed: '', paraphrased: '' })
-    }
-  }, [transcriberOutput]);
 
   return (
     <Surface style={{ height: '100%', paddingHorizontal: 25, paddingVertical: 50, justifyContent: 'space-between' }}>

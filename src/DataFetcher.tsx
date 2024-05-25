@@ -62,14 +62,21 @@ export function fetchAuthenticationResult(email: string, password: string, endpo
   xhr.send(formData);
 };
 
-export function uploadFile(file: any, endpoint: string, formName: string, token: string, done: CallableFunction) {
+export type TranscriberResult = {
+  file: string,
+  transcribed: string,
+  paraphrased: string
+}
+
+export async function uploadFile(file: any, endpoint: string, formName: string, token: string, done: CallableFunction) {
   let formData = new FormData();
   formData.append(formName, file);
   let xhr = new XMLHttpRequest();
   xhr.open('POST', `${API_URL}/${endpoint}`);
   xhr.setRequestHeader('Authorization', `Bearer ${token}`);
   xhr.onload = function () {
-    done(null, xhr.status);
+    done(null, xhr.response);
+    return xhr.response;
   };
   xhr.onerror = function () {
     console.error(xhr.response + xhr.status);

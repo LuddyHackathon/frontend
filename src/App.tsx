@@ -18,6 +18,10 @@ export type RootStackParamList = {
   InterviewerHome: undefined;
   TechnicalInterviewer: { keywords: string };
   HRInterviewer: undefined;
+  InterviewerResults: {
+    questions: Array<string>,
+    
+  };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

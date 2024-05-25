@@ -1,6 +1,6 @@
 import RNFS from 'react-native-fs';
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
-import { uploadFile } from './DataFetcher';
+import { uploadFile, TranscriberResult } from './DataFetcher';
 
 const audioRecorderPlayer = new AudioRecorderPlayer();
 
@@ -8,7 +8,7 @@ export async function startRecording(fileName: string) {
   await audioRecorderPlayer.startRecorder(RNFS.CachesDirectoryPath + '/' + fileName + '.mp4');
 };
 
-export async function stopRecording(token: string) {
+export async function stopRecording(token: string, done: CallableFunction) {
   const result = (await audioRecorderPlayer.stopRecorder()).replace('//', '/');
   audioRecorderPlayer.removeRecordBackListener();
 
@@ -18,7 +18,13 @@ export async function stopRecording(token: string) {
     name: result,
   };
 
-  uploadFile(voiceFile, 'transcriber', 'voiceFile', token, () => { });
+  let output: TranscriberResult;
 
-  RNFS.unlink(result);
+  await uploadFile(voiceFile, 'transcriber', 'voiceFile', token, function (err: string, data: TranscriberResult) {
+    RNFS.unlink(result);
+    if (err) { throw err; }
+    output = data;
+    done(data);
+    console.log('fetched', data)
+  });
 };

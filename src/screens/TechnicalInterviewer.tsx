@@ -51,7 +51,7 @@ const TechnicalInterviewerScreen: React.FC<Props> = ({ route, navigation }: Prop
       if (currentQuestion + 1 != questions.length) {
         setCurrentQuestion(currentQuestion + 1);
       } else {
-        navigation.navigate('InterviewerResults', { questions: questionDetails, showHR: true });
+        navigation.navigate('InterviewerResults', { questions: questionDetails, isHR: false });
       };
     };
     setMicrophoneDisabled(!microphoneDisabled);

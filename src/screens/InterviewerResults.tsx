@@ -22,7 +22,7 @@ type Props = {
 };
 
 const InterviewerResultsScreen: React.FC<Props> = ({ route, navigation }: Props) => {
-  const { questions } = route.params;
+  const { questions, isHR } = route.params;
   const { width, height } = useWindowDimensions();
   return (
     <Surface style={{ height: '100%', width: '100%', alignItems: 'center' }} >
@@ -44,7 +44,9 @@ const InterviewerResultsScreen: React.FC<Props> = ({ route, navigation }: Props)
           </Surface>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
             <Button mode='outlined' onPress={() => navigation.navigate('CareerSpeak')}>Back to Home</Button>
-            <Button mode='contained' onPress={() => navigation.navigate('HRInterviewer')}>HR Interview</Button>
+        { isHR?
+            null
+        :<Button mode='contained' onPress={() => navigation.navigate('HRInterviewer')}>HR Interview</Button>}
           </View>
         </View>
       </View>

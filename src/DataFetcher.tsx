@@ -88,10 +88,10 @@ export async function uploadFile(file: any, endpoint: string, formName: string, 
 export type QuestionsResult = {
   technical_questions: Array<string>,
   hr_questions: {
-    general: string,
-    experience: string,
-    management: string,
-    motivation: string
+    general: Array<string>,
+    experience: Array<string>,
+    management: Array<string>,
+    motivation: Array<string>
   }
 }
 

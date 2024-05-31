@@ -25,7 +25,7 @@ export type RootStackParamList = {
       transcribed: string;
       paraphrased: string;
     }>;
-    showHR: boolean;
+    isHR: boolean;
   };
 };
 
@@ -52,7 +52,7 @@ export default function App() {
       <Stack.Screen name='InterviewerHome' component={InterviewerHomeScreen} />
       <Stack.Screen name='TechnicalInterviewer' component={TechnicalInterviewerScreen} initialParams={{ keywords: 'python' }} />
       <Stack.Screen name='HRInterviewer' component={HRInterviewerScreen} />
-      <Stack.Screen name='InterviewerResults' component={InterviewerResultsScreen} initialParams={{ questions: [{ question: '', transcribed: '', paraphrased: '' }], showHR: true }} />
+      <Stack.Screen name='InterviewerResults' component={InterviewerResultsScreen} initialParams={{ questions: [{ question: '', transcribed: '', paraphrased: '' }], isHR: true }} />
     </Stack.Navigator>
   );
 }

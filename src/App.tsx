@@ -10,6 +10,7 @@ import TechnicalInterviewerScreen from './screens/TechnicalInterviewer';
 import HRInterviewerScreen from './screens/HRInterviewer';
 import InterviewerResultsScreen from './screens/InterviewerResults';
 
+
 export type RootStackParamList = {
   CareerSpeak: undefined;
   Authentication: undefined;

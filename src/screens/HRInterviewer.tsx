@@ -80,63 +80,131 @@
 // };
 
 // export default HRInterviewerScreen;
-
-import React, { useState, useRef } from 'react';
-import { Button } from 'react-native-paper';
+import React, { useRef, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Button, Text } from 'react-native-paper';
 
 const MicrophonePage = () => {
-    const [isRecording, setIsRecording] = useState(false);
-    const [audioUrl, setAudioUrl] = useState('');
-    // Explicitly typing the ref to hold either a MediaRecorder instance or null
-    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-    const audioChunksRef = useRef<Blob[]>([]);
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioUrl, setAudioUrl] = useState('');
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleStartRecording = async () => {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                // Now TypeScript knows mediaRecorderRef can hold a MediaRecorder instance
-                mediaRecorderRef.current = new MediaRecorder(stream);
-                mediaRecorderRef.current.start();
+  const handleStartRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      mediaRecorder.start();
 
-                mediaRecorderRef.current.ondataavailable = (event) => {
-                    audioChunksRef.current.push(event.data);
-                };
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data);
+      };
 
-                mediaRecorderRef.current.onstop = () => {
-                    const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    setAudioUrl(audioUrl);
-                    audioChunksRef.current = [];
-                };
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+        setAudioBlob(blob);
+        const url = URL.createObjectURL(blob);
+        setAudioUrl(url);
+        audioChunksRef.current = [];
+      };
 
-                setIsRecording(true);
-            } catch (error) {
-                console.error('Failed to start recording:', error);
-            }
-        } else {
-            console.error('getUserMedia not supported on this browser!');
-        }
-    };
+      setIsRecording(true);
+    } catch (err) {
+      alert('Microphone permission denied or not supported.');
+      console.error(err);
+    }
+  };
 
-    const handleStopRecording = () => {
-        if (mediaRecorderRef.current) {
-            mediaRecorderRef.current.stop();
-            setIsRecording(false);
-        }
-    };
+  const handleStopRecording = () => {
+    mediaRecorderRef.current?.stop();
+    setIsRecording(false);
+  };
 
-    return (
-        <div style={{ textAlign: 'center', marginTop: 50 }}>
-            <Button onPress={handleStartRecording} disabled={isRecording}>
-                Start Recording
-            </Button>
-            <Button onPress={handleStopRecording} disabled={!isRecording}>
-                Stop Recording
-            </Button>
-            {audioUrl && <audio controls src={audioUrl} style={{ display: 'block', marginTop: 20 }} />}
-        </div>
-    );
+  const handleUploadButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileSelected = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append('voiceFile', file);
+      uploadFile(formData);
+    }
+  };
+
+  const uploadFile = async (formData: FormData) => {
+    try {
+      const res = await fetch('http://127.0.0.1:65535/data', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      alert('Upload successful');
+      console.log(data);
+    } catch (err) {
+      alert('Upload failed');
+      console.error(err);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      {audioUrl && (
+        <View style={styles.audioContainer}>
+          <audio controls src={audioUrl} />
+          <a href={audioUrl} download="recorded_audio.wav" style={{ marginTop: 10 }}>
+            Download Recording
+          </a>
+        </View>
+      )}
+      <View style={styles.buttonContainer}>
+        <Button mode="contained" icon="upload" onPress={handleUploadButtonClick}>
+          Upload File
+        </Button>
+        <Button
+          mode="contained"
+          icon="microphone"
+          onPress={isRecording ? handleStopRecording : handleStartRecording}
+        >
+          {isRecording ? 'Stop Recording' : 'Start Recording'}
+        </Button>
+      </View>
+
+      {/* Actual hidden input element */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="audio/*"
+        onChange={handleFileSelected}
+        style={{ display: 'none' }}
+      />
+    </View>
+  );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30,
+  },
+  audioContainer: {
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+});
+
 export default MicrophonePage;
+

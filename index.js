@@ -21,6 +21,8 @@ const { LightTheme, DarkTheme } = adaptNavigationTheme({
 const CombinedDefaultTheme = merge(MD3LightTheme, LightTheme);
 const CombinedDarkTheme = merge(MD3DarkTheme, DarkTheme);
 
+AppRegistry.registerComponent('main', () => App);
+
 function Main() {
   const [isThemeDark, setIsThemeDark] = React.useState(true);
 

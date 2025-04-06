@@ -15,7 +15,7 @@ type Props = {
 
 const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   const handleGetStarted = () => {
-    navigation.navigate('Authentication');
+    navigation.navigate('HRInterviewer');
   };
 
   let { width, height } = useWindowDimensions();

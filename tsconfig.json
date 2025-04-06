@@ -2,6 +2,7 @@
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
     "module": "ES2022",
+    "lib": ["DOM", "ES6", "DOM.Iterable", "ScriptHost"],
     "typeRoots": [
       "./src/types",
       "./node_modules/",
